@@ -1,6 +1,7 @@
 let SpotifyWebApi = require('spotify-web-api-node');
 const express = require('express')
-const getMyData = require('../playlist');
+const getMyData = require('../spotifyPlaylist');
+const auth = require('./auth');
 
 const scopes = [
   'ugc-image-upload',
@@ -36,10 +37,6 @@ let accessToken = '';
 
 
 
-app.get('/', (req,res) => {
-  res.send('<h1>hello worlds</h1>');
-});
-
 app.get('/login', (req, res) => {
   res.redirect(spotifyApi.createAuthorizeURL(scopes));
 });
@@ -64,6 +61,8 @@ spotifyApi.authorizationCodeGrant(code)
     spotifyApi.setAccessToken(accessToken);
     spotifyApi.setRefreshToken(refreshToken);
 
+    auth.setToken(accessToken);
+
     console.log(`access token: ${accessToken}\n`);
     console.log(`refresh token: ${refreshToken}\n`);
     console.log(`Expires in ${expiresIn} seconds\n`);
@@ -72,19 +71,17 @@ spotifyApi.authorizationCodeGrant(code)
     setInterval(async () => {
         const data = await spotifyApi.refreshAccessToken();
         const accessTokenAgain = data.body['access_token'];
-        console.log('Access token refreshed');
+        console.log(`Access token refreshed: ${accessTokenAgain}`);
         spotifyApi.setAccessToken(accessTokenAgain);
     }, expiresIn / 2 * 1000);
 
     getMyData();
-    // module.exports = {accessToken}; 
 
   })
   .catch(err => {
       console.error(`Error getting tokens: ${err}`);
       res.send(`Error getting tokens: ${err}\n`);
   });
-
 });
 
 
