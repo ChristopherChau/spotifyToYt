@@ -1,11 +1,21 @@
-const ytAuth = require('../youtubeAuthStuff/setToken');
+const ytAuth = require('./setToken');
 
-async function main() {
-  const youtubeToken = await ytAuth.getYoutubeToken();
-  console.log(youtubeToken);
+
+  const youtubeToken = ytAuth.getYoutubeToken();
+  console.log(ytAuth.getYoutubeToken());
+
+
+
+
+async function createYTPlaylist(playlistName){
+
 }
 
-main();
+
+async function addToPlaylist(playlistName, urlToSong){
+
+}
+
 
 // const url = 'https://www.googleapis.com/youtube/v3/playlists';
 
@@ -23,3 +33,5 @@ main();
 
 
 // //http://localhost:5502/api/auth/google
+// node youtubeFuncs/ytPlaylist
+// node youtubeAuthStuff/youtubeOauth

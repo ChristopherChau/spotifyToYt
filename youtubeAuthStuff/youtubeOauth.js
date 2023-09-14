@@ -2,11 +2,14 @@ const express = require('express');
 const authRoutes = require('./googleAuth');
 const passport = require('passport');
 const { config } = require('dotenv');
+const main = require('./google');
+const ytAuth = require('./setToken');
 
 require('./google');
 
 const GOOGLE_ID = '36943627344-9nvmr1ssaln2b61evcgjrujgstd81vav.apps.googleusercontent.com';
 const GOOGLE_SECRET = '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';
+const YOUTUBE_ACCESS_TOKEN = '';
 
 const port = process.env.port || 5502;
 const app = express();
@@ -18,11 +21,13 @@ async function bootstrap(){
 
   try{
     app.listen(port, () => console.log(`Running on port: ${port}`));
+    ytAuth.setYoutubeToken('hello');
   }
   catch(err){
     console.log(err)
   }
-
 }
 
 bootstrap();
+
+module.exports = YOUTUBE_ACCESS_TOKEN

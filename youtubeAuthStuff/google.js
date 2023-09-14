@@ -1,9 +1,15 @@
 const passport = require('passport');
-const { setYoutubeToken } = require('./setToken');
 const Strategy = require('passport-google-oauth20').Strategy;
 const VerifyCallback = require('passport-google-oauth20').VerifyCallback;
 const Profile = require('passport-google-oauth20').Profile
 const ytAuth = require('./setToken');
+
+
+function onTokenAvailable(token) {
+  // You can access the token here and perform actions with it
+  console.log('Access Token:', token);
+}
+
 
 passport.use(
   new Strategy(
@@ -22,4 +28,5 @@ passport.use(
   )
 );
 
+onTokenAvailable(ytAuth.getYoutubeToken())
 
