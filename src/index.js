@@ -1,6 +1,6 @@
 let SpotifyWebApi = require('spotify-web-api-node');
 const express = require('express')
-const getMyData = require('../spotifyPlaylist');
+const getMyData = require('../SpotYTFuncs/spotifyPlaylist');
 const auth = require('./auth');
 
 const scopes = [
@@ -90,5 +90,8 @@ if (require.main === module) {
     console.log(`Server is running on port ${port}`);
   });
 }
+
+
+
 
 

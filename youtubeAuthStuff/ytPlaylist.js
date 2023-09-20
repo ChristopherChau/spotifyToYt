@@ -1,37 +1,38 @@
 const ytAuth = require('./setToken');
+const axios = require('axios');
 
+async function createYTPlaylist(accessToken, playlistName) {
+  const playlistData = {
+    part: "snippet,status",
+    resource: {
+      snippet: {
+        title: "Test",
+        description: "This is a description for my playlist.",
+      },
+      status: {
+        privacyStatus: "public",
+      },
+    },
+  };
 
-  const youtubeToken = ytAuth.getYoutubeToken();
-  console.log(ytAuth.getYoutubeToken());
+  const headers = {
+    'Authorization': `Bearer ${accessToken}`,
+    'Content-Type': 'application/json',
+  };
 
-
-
-
-async function createYTPlaylist(playlistName){
-
+  try {
+    const response = await axios.post('https://www.googleapis.com/youtube/v3/playlists', playlistData, {
+      headers,
+    });
+    console.log('Playlist created successfully:', response.data);
+  } catch (error) {
+    console.error('Error creating playlist:', error);
+    if (error.response) {
+      console.error('Response data:', error.response.data);
+    }
+  }
 }
 
+module.exports = createYTPlaylist;
 
-async function addToPlaylist(playlistName, urlToSong){
-
-}
-
-
-// const url = 'https://www.googleapis.com/youtube/v3/playlists';
-
-
-// let token = ytAuth.getYoutubeToken();
-// console.log(token);
-
-// const config = {
-//   method: 'POST',
-//   headers:{
-//     'Content-Type': 'application/json',
-//     Authorization: `Bearer ${ytAuth.getYoutubeToken}`,
-//   },
-// };
-
-
-// //http://localhost:5502/api/auth/google
-// node youtubeFuncs/ytPlaylist
-// node youtubeAuthStuff/youtubeOauth
+// module.exports = testingToken;
