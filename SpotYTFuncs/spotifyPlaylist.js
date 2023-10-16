@@ -29,22 +29,20 @@ async function getMyData(){
 async function getUserPlaylists(user){
   const data = await spotifyApi.getUserPlaylists(user);
   let playlists = [];
-  let count = 0;
 
   for (let playlist of data.body.items){
-    playlists.push(playlist.name);
-    console.log(playlist.name);
+    if(playlist.name === 'rondom' || playlist.name === 'Kp') {
+      playlists.push(playlist.name);
+      let tracks = await getPlayListsTracks(playlist.id, playlist.name);
+    }
+  }
+  
     
-    let tracks = await getPlayListsTracks(playlist.id, playlist.name);
+    // let tracks = await getPlayListsTracks(playlist.id, playlist.name);
         // const tracksJSON = {tracks};
         // let JSONdata = JSON.stringify(tracksJSON);
         // fs.writeFileSync(`${playlist.name} .json ${data}`);
-        console.log('\n');
-        count++;
-      if (count == 1){
-        break;
-      }
-  }
+  // }
 
   // One Playlist
   // let playlist = data.body.items[0];
@@ -68,9 +66,12 @@ async function getPlayListsTracks(playlistID, playlistName){
     let songName = track.name;
     let songInfo = await searchOnYoutube(songName, artist); //this returns video id and video url so then we can just get both in two diff variables
     let path = `./${playlistName}`;
-    // downloadVideo(path, songName, songInfo.videoUrl);
     console.log(songName);
+    // downloadVideo(path, songName, songInfo.videoUrl);
   }
+
+
+  //This will print out only one song in the first playlist
 
   // let item = data.body.items[0]; 
   // const track = item.track;
