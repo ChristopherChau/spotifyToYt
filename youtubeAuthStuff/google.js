@@ -9,10 +9,10 @@ require('dotenv').config();
 passport.use(
   new GoogleStrategy(
     {
-      clientID: '36943627344-9nvmr1ssaln2b61evcgjrujgstd81vav.apps.googleusercontent.com',
-      clientSecret: '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',
-      callbackURL: 'http://localhost:5502/api/auth/google/redirect',
-      scope: ['email', 'profile', 'https://www.googleapis.com/auth/youtube', 'https://www.googleapis.com/auth/youtube.force-ssl'],
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: process.env.GOOGLE_CALLBACK_URL,
+      scope: process.env.GOOGLE_SCOPE.split(' '),
     },
     (accessToken, refreshToken, profile, done) => {
       console.log(accessToken);

@@ -7,13 +7,15 @@ const createYTPlaylist = require('./ytPlaylist');
 
 require('./google');
 
-const port = process.env.port || 5502;
+const port = process.env.port || 5503;
 const app = express();
 
 
 function afterServerStart() {
   console.log('Server is up and running.');
-  console.log('Access Token:', ytAuth.getYoutubeToken());
+  // console.log('Access Token:', ytAuth.getYoutubeToken());
+  //this gets run right when we start the server
+
   // createYTPlaylist(ytAuth.getYoutubeToken(),'Test');
 
   // Export the access token (if needed)
