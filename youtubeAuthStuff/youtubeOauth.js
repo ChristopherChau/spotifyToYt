@@ -14,7 +14,7 @@ const app = express();
 function afterServerStart() {
   console.log('Server is up and running.');
   console.log('Access Token:', ytAuth.getYoutubeToken());
-  createYTPlaylist(ytAuth.getYoutubeToken(),'Test');
+  // createYTPlaylist(ytAuth.getYoutubeToken(),'Test');
 
   // Export the access token (if needed)
   module.exports = ytAuth.getYoutubeToken();

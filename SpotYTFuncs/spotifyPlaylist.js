@@ -30,12 +30,13 @@ async function getUserPlaylists(user){
   const data = await spotifyApi.getUserPlaylists(user);
   let playlists = [];
 
-  for (let playlist of data.body.items){
-    if(playlist.name === 'rondom' || playlist.name === 'Kp') {
-      playlists.push(playlist.name);
-      let tracks = await getPlayListsTracks(playlist.id, playlist.name);
-    }
-  }
+  // For multiple playlist
+  // for (let playlist of data.body.items){
+  //   if(playlist.name === 'rondom' || playlist.name === 'Kp') {
+  //     playlists.push(playlist.name);
+  //     let tracks = await getPlayListsTracks(playlist.id, playlist.name);
+  //   }
+  // }
   
     
     // let tracks = await getPlayListsTracks(playlist.id, playlist.name);
@@ -45,9 +46,9 @@ async function getUserPlaylists(user){
   // }
 
   // One Playlist
-  // let playlist = data.body.items[0];
-  // console.log('\n\n\n' + playlist.name + " " + playlist.id);
-  // let tracks = await getPlayListsTracks(playlist.id, playlist.name);
+  let playlist = data.body.items[0];
+  console.log('\n\n\n' + playlist.name + " " + playlist.id);
+  let tracks = await getPlayListsTracks(playlist.id, playlist.name);
 }
 
 async function getPlayListsTracks(playlistID, playlistName){
@@ -58,28 +59,25 @@ async function getPlayListsTracks(playlistID, playlistName){
   })
 
   let tracks = [];
-  let count = 0;
-  for (let trackObj of data.body.items){
-    const track = trackObj.track;
-    tracks.push(track);
-    let artist = track.artists[0].name;
-    let songName = track.name;
-    let songInfo = await searchOnYoutube(songName, artist); //this returns video id and video url so then we can just get both in two diff variables
-    let path = `./${playlistName}`;
-    console.log(songName);
-    // downloadVideo(path, songName, songInfo.videoUrl);
-  }
+  // let count = 0;
+  // for (let trackObj of data.body.items){
+  //   const track = trackObj.track;
+  //   tracks.push(track);
+  //   let artist = track.artists[0].name;
+  //   let songName = track.name;
+  //   let songInfo = await searchOnYoutube(songName, artist); //this returns video id and video url so then we can just get both in two diff variables
+  //   let path = `./${playlistName}`;
+  //   downloadVideo(path, songName, songInfo.videoUrl);
+  // }
 
 
-  //This will print out only one song in the first playlist
-
-  // let item = data.body.items[0]; 
-  // const track = item.track;
-  // let artist = track.artists[0].name;
-  // let songName = track.name;
-  // let songInfo = await searchOnYoutube(songName, artist);
-  // console.log(songInfo.videoUrl);
-  
+  // This will print out only one song in the first playlist
+  let item = data.body.items[0]; 
+  const track = item.track;
+  let artist = track.artists[0].name;
+  let songName = track.name;
+  let songInfo = await searchOnYoutube(songName, artist);
+  console.log(songInfo.videoUrl);
 
   return tracks;
 }
