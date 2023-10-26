@@ -26,7 +26,7 @@ passport.use(
 // Other configuration, routes, and middleware can be added here
 
 // Start the server
-const PORT = process.env.PORT || 5503; // Use the desired port
+const PORT = process.env.port || 6601; // Use the desired port
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
