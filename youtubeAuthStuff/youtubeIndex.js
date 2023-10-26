@@ -1,26 +1,36 @@
-const { config } = require('dotenv');
-config();
-
 const express = require('express');
-const passport = require('passport');
 const authRoutes = require('./googleAuth');
+const passport = require('passport');
+const main = require('./google');
+const ytAuth = require('./setToken');
+// const createYTPlaylist = require('./ytPlaylist');
 
 require('./google');
 
+const port = process.env.port || 5502;
 const app = express();
-const port = 5520;
 
-app.use(passport.initialize());
 
-app.use('/api/auth', authRoutes);
+function afterServerStart() {
+  console.log('Server is up and running.');
+  console.log('Access Token:', ytAuth.getYoutubeToken());
+  // createYTPlaylist(ytAuth.getYoutubeToken(),'Test');
 
-async function bootstrap() {
+  // Export the access token (if needed)
+  // module.exports = ytAuth.getYoutubeToken();
+}
+
+async function bootstrap(callback) {
+  app.use(passport.initialize());
+  app.use('/api/auth', authRoutes);
+
   try {
-    app.listen(port, () => console.log(`Running on port in the index file ${port}`));
+    await app.listen(port);
+    callback(); // Call the callback after server startup
   } catch (err) {
     console.log(err);
   }
 }
 
-
-bootstrap();
+// Call bootstrap with the afterServerStart callback
+bootstrap(afterServerStart);
