@@ -21,7 +21,9 @@ function afterServerStart() {
 }
 
 async function bootstrap(callback) {
+  //Initialize middleware that will allow us to handle authentication
   app.use(passport.initialize());
+  //This will specify the routes that we can take and what to do when we go to these routes 
   app.use('/api/auth', authRoutes);
 
   try {
