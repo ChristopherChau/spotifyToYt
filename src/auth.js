@@ -1,14 +1,14 @@
-let accessToken = '';
+let accessToken = "";
 
-function setToken(token){
-  accessToken = token;
+function setToken(token) {
+    accessToken = token;
 }
 
-function getToken(){
-  return accessToken;
+function getToken() {
+    return accessToken;
 }
 
 module.exports = {
-  setToken,
-  getToken,
+    setToken,
+    getToken,
 };
