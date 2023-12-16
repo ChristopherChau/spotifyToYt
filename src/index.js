@@ -37,8 +37,7 @@ let accessToken = "";
 
 app.get("/login", (req, res) => {
     //create path so when users go to login path, the code below will run (user is redirected to that website)
-    // res.redirect(spotifyApi.createAuthorizeURL(scopes));
-    console.log("login");
+    res.redirect(spotifyApi.createAuthorizeURL(scopes));
 });
 
 app.get("/callback", (req, res) => {
@@ -76,12 +75,23 @@ app.get("/callback", (req, res) => {
                 spotifyApi.setAccessToken(accessTokenAgain);
             }, (expiresIn / 2) * 1000);
 
-            getMyData(); //prior to this, we get the access and refresh tokens and we set them in the spotifyApi object and the auth.js file and then we get user data
+            // getMyData(); //prior to this, we get the access and refresh tokens and we set them in the spotifyApi object and the auth.js file and then we get user data
         })
         .catch((err) => {
             console.error(`Error getting tokens: ${err}`);
             res.send(`Error getting tokens: ${err}\n`);
         });
+});
+
+app.get("/getPlaylist", (req, res) => {
+    // getMyData();
+    if (!accessToken) {
+        res.redirect("/login");
+        console.log("no token");
+    } else {
+        console.log("in playlist");
+        res.send("Successful");
+    }
 });
 
 if (require.main === module) {
