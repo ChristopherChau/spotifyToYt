@@ -37,7 +37,8 @@ let accessToken = "";
 
 app.get("/login", (req, res) => {
     //create path so when users go to login path, the code below will run (user is redirected to that website)
-    res.redirect(spotifyApi.createAuthorizeURL(scopes));
+    // res.redirect(spotifyApi.createAuthorizeURL(scopes));
+    console.log("login");
 });
 
 app.get("/callback", (req, res) => {
