@@ -83,11 +83,12 @@ app.get("/callback", (req, res) => {
         });
 });
 
-app.get("/getPlaylist", (req, res) => {
+app.get("/getPlaylists", (req, res) => {
     // getMyData();
     if (!accessToken) {
-        res.redirect("/login");
         console.log("no token");
+        res.send("no token");
+        // res.redirect("/login");
     } else {
         console.log("in playlist");
         res.send("Successful");
