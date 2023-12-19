@@ -17,8 +17,9 @@ async function setTokenData() {
 async function getMyData() {
     (async () => {
         setTokenData();
-        const me = await spotifyApi.getMe();
-        getUserPlaylists(me.body.id);
+        // const me = await spotifyApi.getMe();
+        // getUserPlaylists(me.body.id);
+        console.log("getting user data");
     })().catch((err) => {
         console.error(err);
     });
@@ -46,6 +47,7 @@ async function getUserPlaylists(user) {
     let playlist = data.body.items[0];
     console.log("\n\n\n" + playlist.name + " " + playlist.id);
     let tracks = await getPlayListsTracks(playlist.id, playlist.name);
+    //create yt playlist here?
 }
 
 async function getPlayListsTracks(playlistID, playlistName) {
@@ -73,6 +75,7 @@ async function getPlayListsTracks(playlistID, playlistName) {
     let artist = track.artists[0].name;
     let songName = track.name;
     let songInfo = await searchOnYoutube(songName, artist);
+
     console.log(songInfo.videoUrl);
 
     return tracks;

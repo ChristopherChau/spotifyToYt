@@ -84,7 +84,6 @@ app.get("/callback", (req, res) => {
 });
 
 app.get("/getPlaylists", (req, res) => {
-    // getMyData();
     if (!accessToken) {
         console.log("no token");
         res.send("no token");
@@ -92,6 +91,7 @@ app.get("/getPlaylists", (req, res) => {
     } else {
         console.log("in playlist");
         res.send("Successful");
+        getMyData();
     }
 });
 
