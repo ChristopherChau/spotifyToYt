@@ -11,42 +11,49 @@ require("./google");
 const port = process.env.port || 5502;
 const app = express();
 
-// async function createYoutubePlaylist(playlistName, accessToken) {
-//     const data = {
-//         snippet: {
-//             title: playlistName,
-//             description: "Playlist created from Spotify",
-//             defaultLanguage: "en",
-//         },
-//         status: {
-//             privacyStatus: "private",
-//         },
-//     };
+async function createYoutubePlaylist(playlistName, accessToken) {
+    const data = {
+        snippet: {
+            title: playlistName,
+            description: "Playlist created from Spotify",
+            defaultLanguage: "en",
+        },
+        status: {
+            privacyStatus: "private",
+        },
+    };
 
-//     const response = await axios.post(
-//         "https://www.googleapis.com/youtube/v3/playlists?part=snippet,status",
-//         data,
-//         {
-//             headers: {
-//                 "Content-Type": "application/json",
-//                 Authorization: `Bearer ${accessToken}`,
-//             },
-//         }
-//     );
+    try {
+        const response = await axios.post(
+            "https://www.googleapis.com/youtube/v3/playlists?part=snippet,status",
+            data,
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            }
+        );
 
-//     return response.data;
-// }
+        return response.data;
+    } catch (error) {
+        console.error(`Failed to create YouTube playlist: ${error}`);
+        // You can throw the error again to let the caller handle it
+        throw error;
+    }
+}
 
 function afterServerStart() {
     console.log("Server is up and running.");
+    console.log(`Access token: ${ytAuth.getToken()}`);
 
-    // createYoutubePlaylist("Test", ytAuth.getYoutubeToken());
+    // createYoutubePlaylist("Test", ytAuth.getToken());
 }
 
 async function bootstrap(callback) {
     app.use(
         session({
-            secret: `${ytAuth.getYoutubeToken()}`, // replace with your own secret key
+            secret: `${ytAuth.getToken()}`, // replace with your own secret key
             resave: false,
             saveUninitialized: true,
         })
@@ -66,7 +73,7 @@ async function bootstrap(callback) {
     app.use("/api/auth", authRoutes);
 
     try {
-        await app.listen(port);
+        app.listen(port);
         callback(); // Call the callback after server startup
     } catch (err) {
         console.log(err);

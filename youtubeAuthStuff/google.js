@@ -20,9 +20,8 @@ passport.use(
             //VARIABLES ABOVE MUST BE SET LIKE THAT BECAUSE IT IS PART OF STRATEGY CONSTRUCTOR
         },
         async (accessToken, refreshToken, profile, done) => {
-            console.log(accessToken);
-            await ytAuth.setYoutubeToken(accessToken);
-            console.log(ytAuth.getYoutubeToken());
+            ytAuth.setToken(accessToken);
+            console.log(`Access token: ${ytAuth.getToken()}`);
             done(null, profile);
         }
     )
