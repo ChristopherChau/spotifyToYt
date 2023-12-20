@@ -1,5 +1,4 @@
-const fs = require("fs");
-const { url } = require("inspector");
+const axios = require("axios");
 const SpotifyWebApi = require("spotify-web-api-node");
 const auth = require("../src/auth");
 const downloadVideo = require("./download");
@@ -13,6 +12,22 @@ async function setTokenData() {
     token = auth.getToken();
     spotifyApi.setAccessToken(token);
 }
+
+// async function createYoutubePlaylist(playlistName) {
+//     const data = {
+//         name: playlistName,
+//         // other data required by the YouTube API
+//     };
+
+//     const response = await axios.post('https://www.googleapis.com/youtube/v3/playlists', data, {
+//         headers: {
+//             'Content-Type': 'application/json',
+//             // include your authorization header here
+//         },
+//     });
+
+//     return response.data;
+// }
 
 async function getMyData() {
     (async () => {
