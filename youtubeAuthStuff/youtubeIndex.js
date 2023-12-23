@@ -7,7 +7,7 @@ const ytAuth = require("./setToken");
 
 require("./google");
 
-const port = process.env.port || 5502;
+const port = process.env.port || 5501;
 const app = express();
 
 async function afterServerStart() {

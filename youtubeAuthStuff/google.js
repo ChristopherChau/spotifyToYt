@@ -43,7 +43,7 @@ passport.use(
             clientID:
                 "36943627344-9nvmr1ssaln2b61evcgjrujgstd81vav.apps.googleusercontent.com",
             clientSecret: "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",
-            callbackURL: "http://localhost:5502/api/auth/google/redirect",
+            callbackURL: "http://localhost:5501/api/auth/google/redirect",
             scope: [
                 "email",
                 "profile",
@@ -57,7 +57,7 @@ passport.use(
             console.log(`Access token: ${ytAuth.getToken()}`);
             if (ytAuth.getToken() != null) {
                 try {
-                    await createYoutubePlaylist("Test", ytAuth.getToken());
+                    await createYoutubePlaylist("KPop", ytAuth.getToken());
                     console.log("trying to create playlist");
                 } catch (error) {
                     console.log(error);
