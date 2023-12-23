@@ -36,6 +36,23 @@ async function createYoutubePlaylist(playlistName, accessToken) {
         throw error;
     }
 }
+async function getOwnPlaylists(accessToken) {
+    try {
+        const response = await axios.get(
+            "https://www.googleapis.com/youtube/v3/playlists?part=id,snippet&mine=true",
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            }
+        );
+        return response.data;
+    } catch (error) {
+        console.error(`Failed to get YouTube playlists: ${error}`);
+        throw error;
+    }
+}
 
 passport.use(
     new Strategy(
@@ -50,15 +67,15 @@ passport.use(
                 "https://www.googleapis.com/auth/youtube",
                 "https://www.googleapis.com/auth/youtube.force-ssl",
             ],
-            //VARIABLES ABOVE MUST BE SET LIKE THAT BECAUSE IT IS PART OF STRATEGY CONSTRUCTOR
         },
         async (accessToken, refreshToken, profile, done) => {
             ytAuth.setToken(accessToken);
             console.log(`Access token: ${ytAuth.getToken()}`);
             if (ytAuth.getToken() != null) {
                 try {
-                    await createYoutubePlaylist("KPop", ytAuth.getToken());
-                    console.log("trying to create playlist");
+                    data = await getOwnPlaylists(ytAuth.getToken());
+                    console.log(data.items);
+                    // await createYoutubePlaylist("KPop", ytAuth.getToken());
                 } catch (error) {
                     console.log(error);
                 }

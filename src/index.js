@@ -87,7 +87,7 @@ app.get("/getPlaylists", (req, res) => {
     if (!accessToken) {
         console.log("no token");
         res.send("no token");
-        // res.redirect("/login");
+        // getMyData();
     } else {
         console.log("in playlist");
         res.send("Successful");
