@@ -4,7 +4,6 @@ const authRoutes = require("./googleAuth");
 const passport = require("passport");
 const main = require("./google");
 const ytAuth = require("./setToken");
-const axios = require("axios");
 
 require("./google");
 
