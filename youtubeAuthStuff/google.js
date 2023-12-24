@@ -70,11 +70,14 @@ passport.use(
         },
         async (accessToken, refreshToken, profile, done) => {
             ytAuth.setToken(accessToken);
-            console.log(`Access token: ${ytAuth.getToken()}`);
+
             if (ytAuth.getToken() != null) {
                 try {
-                    data = await getOwnPlaylists(ytAuth.getToken());
-                    console.log(data.items);
+                    playlists = await getOwnPlaylists(ytAuth.getToken());
+                    numberOfPlaylists = playlists.items.length;
+                    for (let i = 0; i < numberOfPlaylists; i++) {
+                        console.log(playlists.items[i].id);
+                    }
                     // await createYoutubePlaylist("KPop", ytAuth.getToken());
                 } catch (error) {
                     console.log(error);
