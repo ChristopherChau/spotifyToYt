@@ -3,6 +3,7 @@ const SpotifyWebApi = require("spotify-web-api-node");
 const auth = require("../src/auth");
 const downloadVideo = require("./download");
 const searchOnYoutube = require("./youtube");
+const spotifyData = require("../setSpotify");
 
 let token = "";
 
@@ -62,25 +63,27 @@ async function getUserPlaylists(user) {
 async function getPlayListsTracks(playlistID, playlistName) {
     const data = await spotifyApi.getPlaylistTracks(playlistID, {
         offset: 1,
-        limit: 100,
+        limit: 200,
         fields: "items", //specifies the field to include in the response (only looking for items field which contains the array's track objs)
     });
+    spotifyData.setData(data);
+    console.log("just set data");
 
-    let tracks = [];
-    let count = 0;
-    for (let trackObj of data.body.items) {
-        const track = trackObj.track;
-        tracks.push(track);
-        let artist = track.artists[0].name;
-        let songName = track.name;
-        let songInfo = await searchOnYoutube(songName, artist); //this returns video id and video url so then we can just get both in two diff variables
-        let path = `./${playlistName}`;
-        //   downloadVideo(path, songName, songInfo.videoUrl);
-        console.log(songInfo.videoUrl);
-        if (count === 5) {
-            break;
-        }
-    }
+    // let tracks = [];
+    // let count = 0;
+    // for (let trackObj of data.body.items) {
+    //     const track = trackObj.track;
+    //     tracks.push(track);
+    //     let artist = track.artists[0].name;
+    //     let songName = track.name;
+    //     let songInfo = await searchOnYoutube(songName, artist); //this returns video id and video url so then we can just get both in two diff variables
+    //     let path = `./${playlistName}`;
+    //     //   downloadVideo(path, songName, songInfo.videoUrl);
+    //     console.log(songInfo.videoUrl);
+    //     if (count === 5) {
+    //         break;
+    //     }
+    // }
 
     return tracks;
 }

@@ -4,6 +4,9 @@ const Strategy = require("passport-google-oauth20").Strategy;
 const VerifyCallback = require("passport-google-oauth20").VerifyCallback;
 const Profile = require("passport-google-oauth20").Profile;
 const ytAuth = require("./setToken");
+const spotifyData = require("../setSpotify");
+
+const YT_API_KEY = "AIzaSyDEe56vgEU2DSR-3gVEVK0xsA3octKQFI4";
 
 async function createYoutubePlaylist(playlistName, accessToken) {
     const data = {
@@ -81,6 +84,23 @@ async function insertSongIntoPlaylist(playListID, resourceID, accessToken) {
     }
 }
 
+async function searchOnYoutube(song, artist) {
+    try {
+        const searchQuery = `${song} ${artist} song lyrics`;
+        let YT_API_URL = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q=${searchQuery}&type=video&key=${YT_API_KEY}`;
+        const response = await axios.get(YT_API_URL);
+
+        const videoID = response.data.items[0].id.videoId;
+        return {
+            videoID,
+            videoUrl: `https://www.youtube.com/watch?v=${videoID}`,
+        };
+    } catch (err) {
+        console.error(`Error searching ${song} on Youtube: ${err}`);
+        return null;
+    }
+}
+
 passport.use(
     new Strategy(
         {
@@ -101,20 +121,22 @@ passport.use(
 
             if (ytAuth.getToken() != null) {
                 try {
-                    playlists = await getOwnPlaylists(ytAuth.getToken());
-                    // numberOfPlaylists = playlists.items.length;
-                    // console.log(playlists.items[0].id);
-                    await insertSongIntoPlaylist(
-                        playlists.items[0].id,
-                        "x8RIixqumUc",
-                        ytAuth.getToken()
-                    );
-
-                    // for (let i = 0; i < numberOfPlaylists; i++) { //loop through playlists
+                    playlists = await getOwnPlaylists(ytAuth.getToken()); //later this will be changed to the length of the spotify playlists
+                    // await createYoutubePlaylist("KPop", ytAuth.getToken()); //create a playlist based on spotify playlist name
+                    // for (let i = 0; i < numberOfPlaylists; i++) { //loop through playlist songs and then search them up on youtube then add then to a playlist
                     //     console.log(playlists.items[i].id);
 
                     // }
-                    // await createYoutubePlaylist("KPop", ytAuth.getToken());
+                    // console.log(spotifyData.getData());
+
+                    // numberOfPlaylists = playlists.items.length;
+                    // console.log(playlists.items[0].id);
+                    // videoInfo = await searchOnYoutube("", "New Jeans"); //search the song on youtube and then get its ID to add into given playlist
+                    // await insertSongIntoPlaylist(
+                    //     playlists.items[0].id,
+                    //     `${videoInfo.videoID}`,
+                    //     ytAuth.getToken()
+                    // );
                 } catch (error) {
                     console.log(error);
                 }
