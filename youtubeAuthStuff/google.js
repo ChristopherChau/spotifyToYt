@@ -123,10 +123,13 @@ passport.use(
                 try {
                     playlists = await getOwnPlaylists(ytAuth.getToken()); //later this will be changed to the length of the spotify playlists
                     // await createYoutubePlaylist("KPop", ytAuth.getToken()); //create a playlist based on spotify playlist name
-                    // for (let i = 0; i < numberOfPlaylists; i++) { //loop through playlist songs and then search them up on youtube then add then to a playlist
+                    // for (let i = 0; i < numberOfPlaylists; i++) { //loop through playlist songs and then search them up on youtube then add then to a playlist then we can loop over our spotify playlists and download them
                     //     console.log(playlists.items[i].id);
 
                     // }
+
+                    // try to merge the two files by probably putting index and youtubeIndex into the same directory and then fixing imports and hopefully that way we can use the same port and then go between the two programs to get the spotify data and then put through youtube data
+
                     // console.log(spotifyData.getData());
 
                     // numberOfPlaylists = playlists.items.length;
