@@ -56,7 +56,7 @@ async function getOwnPlaylists(accessToken) {
 async function insertSongIntoPlaylist(playListID, resourceID, accessToken) {
     const data = {
         snippet: {
-            playListId: playListID,
+            playlistId: playListID, // Changed from playListId to playlistId
             resourceId: {
                 kind: "youtube#video",
                 videoId: `${resourceID}`,
@@ -65,7 +65,7 @@ async function insertSongIntoPlaylist(playListID, resourceID, accessToken) {
     };
     try {
         const response = await axios.post(
-            "https://www.googleapis.com/youtube/v3/playlistItems?part=id,status,snippet",
+            "https://www.googleapis.com/youtube/v3/playlistItems?part=contentDetails,id,status,snippet",
             data,
             {
                 headers: {
@@ -99,26 +99,27 @@ passport.use(
             ytAuth.setToken(accessToken);
             console.log(ytAuth.getToken());
 
-            // if (ytAuth.getToken() != null) {
-            //     try {
-            //         playlists = await getOwnPlaylists(ytAuth.getToken());
-            //         // numberOfPlaylists = playlists.items.length;
-            //         await insertSongIntoPlaylist(
-            //             playlists.items[0].id,
-            //             "x8RIixqumUc",
-            //             ytAuth.getToken()
-            //         );
+            if (ytAuth.getToken() != null) {
+                try {
+                    playlists = await getOwnPlaylists(ytAuth.getToken());
+                    // numberOfPlaylists = playlists.items.length;
+                    // console.log(playlists.items[0].id);
+                    await insertSongIntoPlaylist(
+                        playlists.items[0].id,
+                        "x8RIixqumUc",
+                        ytAuth.getToken()
+                    );
 
-            //         // for (let i = 0; i < numberOfPlaylists; i++) { //loop through playlists
-            //         //     console.log(playlists.items[i].id);
+                    // for (let i = 0; i < numberOfPlaylists; i++) { //loop through playlists
+                    //     console.log(playlists.items[i].id);
 
-            //         // }
-            //         // await createYoutubePlaylist("KPop", ytAuth.getToken());
-            //     } catch (error) {
-            //         console.log(error);
-            //     }
-            // }
-            // done(null, profile);
+                    // }
+                    // await createYoutubePlaylist("KPop", ytAuth.getToken());
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+            done(null, profile);
         }
     )
 );
