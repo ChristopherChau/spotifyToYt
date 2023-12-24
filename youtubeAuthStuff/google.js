@@ -53,6 +53,33 @@ async function getOwnPlaylists(accessToken) {
         throw error;
     }
 }
+async function insertSongIntoPlaylist(playListID, resourceID, accessToken) {
+    const data = {
+        snippet: {
+            playListId: playListID,
+            resourceId: {
+                kind: "youtube#video",
+                videoId: `${resourceID}`,
+            },
+        },
+    };
+    try {
+        const response = await axios.post(
+            "https://www.googleapis.com/youtube/v3/playlistItems?part=id,status,snippet",
+            data,
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            }
+        );
+        return response.data;
+    } catch (error) {
+        console.error(`Failed to insert song into playlist: ${error}`);
+        throw error;
+    }
+}
 
 passport.use(
     new Strategy(
@@ -70,20 +97,28 @@ passport.use(
         },
         async (accessToken, refreshToken, profile, done) => {
             ytAuth.setToken(accessToken);
+            console.log(ytAuth.getToken());
 
-            if (ytAuth.getToken() != null) {
-                try {
-                    playlists = await getOwnPlaylists(ytAuth.getToken());
-                    numberOfPlaylists = playlists.items.length;
-                    for (let i = 0; i < numberOfPlaylists; i++) {
-                        console.log(playlists.items[i].id);
-                    }
-                    // await createYoutubePlaylist("KPop", ytAuth.getToken());
-                } catch (error) {
-                    console.log(error);
-                }
-            }
-            done(null, profile);
+            // if (ytAuth.getToken() != null) {
+            //     try {
+            //         playlists = await getOwnPlaylists(ytAuth.getToken());
+            //         // numberOfPlaylists = playlists.items.length;
+            //         await insertSongIntoPlaylist(
+            //             playlists.items[0].id,
+            //             "x8RIixqumUc",
+            //             ytAuth.getToken()
+            //         );
+
+            //         // for (let i = 0; i < numberOfPlaylists; i++) { //loop through playlists
+            //         //     console.log(playlists.items[i].id);
+
+            //         // }
+            //         // await createYoutubePlaylist("KPop", ytAuth.getToken());
+            //     } catch (error) {
+            //         console.log(error);
+            //     }
+            // }
+            // done(null, profile);
         }
     )
 );
