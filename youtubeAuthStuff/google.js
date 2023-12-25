@@ -121,7 +121,8 @@ passport.use(
 
             if (ytAuth.getToken() != null) {
                 try {
-                    playlists = await getOwnPlaylists(ytAuth.getToken()); //later this will be changed to the length of the spotify playlists
+                    console.log("hello");
+                    // playlists = await getOwnPlaylists(ytAuth.getToken()); //later this will be changed to the length of the spotify playlists
                     // await createYoutubePlaylist("KPop", ytAuth.getToken()); //create a playlist based on spotify playlist name
                     // for (let i = 0; i < numberOfPlaylists; i++) { //loop through playlist songs and then search them up on youtube then add then to a playlist then we can loop over our spotify playlists and download them
                     //     console.log(playlists.items[i].id);

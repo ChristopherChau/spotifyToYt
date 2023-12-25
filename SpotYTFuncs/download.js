@@ -23,6 +23,10 @@ async function createDirectory(path) {
 
 async function downloadVideo(path, title, songURL) {
     let outputDirectory = `--output "${path}/${title}.mp3"`;
+    if (fs.existsSync(outputDirectory)) {
+        console.log(`File ${title}.mp3 already exists. Skipping download.`);
+        return;
+    }
     const command = `/Users/christofur/documents/yt-dlp-stuff/yt-dlp_macos ${outputDirectory} --extract-audio --audio-format mp3 "${songURL}"`;
     exec(command, (stdout, stderr, error) => {
         if (error) {

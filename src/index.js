@@ -2,6 +2,11 @@ let SpotifyWebApi = require("spotify-web-api-node");
 const express = require("express");
 const getMyData = require("../SpotYTFuncs/spotifyPlaylist");
 const auth = require("./auth");
+const session = require("express-session");
+const authRoutes = require("../youtubeAuthStuff/googleAuth");
+const passport = require("passport");
+const main = require("../youtubeAuthStuff/google");
+const ytAuth = require("../youtubeAuthStuff/setToken");
 
 const scopes = [
     "ugc-image-upload",
@@ -25,6 +30,7 @@ const scopes = [
     "user-follow-modify",
 ];
 const port = process.env.port || 5501;
+const app = express();
 
 let spotifyApi = new SpotifyWebApi({
     clientId: "f0b88a30739c41fba231326afc7d0d15",
@@ -32,7 +38,6 @@ let spotifyApi = new SpotifyWebApi({
     redirectUri: `http://localhost:${port}/callback`,
 });
 
-const app = express(); //create express app
 let accessToken = "";
 
 app.get("/login", (req, res) => {
@@ -75,7 +80,7 @@ app.get("/callback", (req, res) => {
                 spotifyApi.setAccessToken(accessTokenAgain);
             }, (expiresIn / 2) * 1000);
 
-            // getMyData(); //prior to this, we get the access and refresh tokens and we set them in the spotifyApi object and the auth.js file and then we get user data
+            getMyData(); //prior to this, we get the access and refresh tokens and we set them in the spotifyApi object and the auth.js file and then we get user data
         })
         .catch((err) => {
             console.error(`Error getting tokens: ${err}`);
@@ -95,8 +100,40 @@ app.get("/getPlaylists", (req, res) => {
     }
 });
 
-if (require.main === module) {
-    app.listen(port, () => {
-        console.log(`Server is running on port ${port}`);
-    });
+async function afterServerStart() {
+    console.log("Server is up and running.");
+    console.log(`Access token: ${ytAuth.getToken()}`);
 }
+
+async function bootstrap(callback) {
+    app.use(
+        session({
+            secret: `${ytAuth.getToken()}`, // replace with your own secret key
+            resave: false,
+            saveUninitialized: true,
+        })
+    );
+    //Initialize middleware that will allow us to handle authentication
+    app.use(passport.initialize());
+    passport.serializeUser((user, done) => {
+        done(null, user.id);
+    });
+
+    passport.deserializeUser((id, done) => {
+        User.findById(id, (err, user) => {
+            done(err, user);
+        });
+    });
+    //This will specify the routes that we can take and what to do when we go to these routes
+    app.use("/api/auth", authRoutes);
+
+    try {
+        app.listen(port);
+        callback(); // Call the callback after server startup
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+// Call bootstrap with the afterServerStart callback
+bootstrap(afterServerStart);
