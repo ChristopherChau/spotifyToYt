@@ -50,9 +50,10 @@ async function getPlayListsTracks(playlistID, playlistName) {
     const data = await spotifyApi.getPlaylistTracks(playlistID, {
         offset: 0,
         limit: 100,
-        fields: "items", //specifies the field to include in the response (only looking for items field which contains the array's track objs)
+        fields: "items",
     });
-    spotifyData.setData(data);
+    // spotifyData.setData(data); //find out what this data is and why we are setting it to use it for later
+    console.log(data);
 
     let tracks = [];
     let count = 0;
@@ -70,6 +71,7 @@ async function getPlayListsTracks(playlistID, playlistName) {
         //     break;
         // }
         setPlaylistAndTracks(playlistName, `${songName} ${artist}`);
+        // we're able to get all the songs and the artists to use globally
     }
 
     return tracks;
