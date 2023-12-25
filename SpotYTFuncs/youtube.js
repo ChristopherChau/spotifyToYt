@@ -1,9 +1,9 @@
 const YT_API_KEY = "AIzaSyDEe56vgEU2DSR-3gVEVK0xsA3octKQFI4";
 const axios = require("axios");
 
-async function searchOnYoutube(song, artist) {
+async function searchOnYoutube(song) {
     try {
-        const searchQuery = `${song} ${artist} song lyrics`;
+        const searchQuery = `${song} song lyrics`;
         let YT_API_URL = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q=${searchQuery}&type=video&key=${YT_API_KEY}`;
         const response = await axios.get(YT_API_URL);
 

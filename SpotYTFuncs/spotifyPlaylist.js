@@ -4,8 +4,10 @@ const auth = require("../src/auth");
 const downloadVideo = require("./download");
 const searchOnYoutube = require("./youtube");
 const spotifyData = require("../setSpotify");
+const { setPlaylistAndTracks } = require("../setPlaylistInfo");
 
 let token = "";
+let dictionary = {};
 
 const spotifyApi = new SpotifyWebApi();
 
@@ -30,17 +32,17 @@ async function getUserPlaylists(user) {
     let playlists = [];
 
     // For multiple playlist
-    // for (let playlist of data.body.items){
-    //   if(playlist.name === 'rondom' || playlist.name === 'Kp') {
-    //     playlists.push(playlist.name);
-    //     let tracks = await getPlayListsTracks(playlist.id, playlist.name);
-    //   }
-    // }
+    for (let playlist of data.body.items) {
+        if (playlist.name === "rondom" || playlist.name === "Kp") {
+            playlists.push(playlist.name);
+            let tracks = await getPlayListsTracks(playlist.id, playlist.name);
+        }
+    }
 
     // One Playlist
-    let playlist = data.body.items[0];
-    console.log("\n\n\n" + playlist.name);
-    let tracks = await getPlayListsTracks(playlist.id, playlist.name);
+    // let playlist = data.body.items[0];
+    // console.log("\n\n\n" + playlist.name);
+    // let tracks = await getPlayListsTracks(playlist.id, playlist.name);
     //create yt playlist here?
 }
 
@@ -59,18 +61,19 @@ async function getPlayListsTracks(playlistID, playlistName) {
         tracks.push(track);
         let artist = track.artists[0].name;
         let songName = track.name;
-        let songInfo = await searchOnYoutube(songName, artist); //this returns video id and video url so then we can just get both in two diff variables
-        let path = `./${playlistName}`;
-        downloadVideo(path, songName, songInfo.videoUrl);
-        count++;
+        // let songInfo = await searchOnYoutube(songName, artist); //this returns video id and video url so then we can just get both in two diff variables
+        // let path = `./${playlistName}`;
+        // downloadVideo(path, songName, songInfo.videoUrl);
+        // count++;
 
-        if (count === 1) {
-            break;
-        }
+        // if (count === 1) {
+        //     break;
+        // }
+        setPlaylistAndTracks(playlistName, `${songName} ${artist}`);
     }
-    console.log(tracks.length);
 
     return tracks;
 }
 
 module.exports = getMyData;
+// module.exports = getPlayListsTracks;

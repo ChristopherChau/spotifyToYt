@@ -7,6 +7,7 @@ const authRoutes = require("../youtubeAuthStuff/googleAuth");
 const passport = require("passport");
 const main = require("../youtubeAuthStuff/google");
 const ytAuth = require("../youtubeAuthStuff/setToken");
+const { getPlaylistAndTracks } = require("../setPlaylistInfo");
 
 const scopes = [
     "ugc-image-upload",
@@ -92,11 +93,10 @@ app.get("/getPlaylists", (req, res) => {
     if (!accessToken) {
         console.log("no token");
         res.send("no token");
-        // getMyData();
     } else {
         console.log("in playlist");
         res.send("Successful");
-        getMyData();
+        getPlaylistAndTracks();
     }
 });
 
