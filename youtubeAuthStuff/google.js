@@ -121,26 +121,25 @@ passport.use(
 
             if (ytAuth.getToken() != null) {
                 try {
-                    console.log("hello");
-                    // playlists = await getOwnPlaylists(ytAuth.getToken()); //later this will be changed to the length of the spotify playlists
-                    // await createYoutubePlaylist("KPop", ytAuth.getToken()); //create a playlist based on spotify playlist name
-                    // for (let i = 0; i < numberOfPlaylists; i++) { //loop through playlist songs and then search them up on youtube then add then to a playlist then we can loop over our spotify playlists and download them
-                    //     console.log(playlists.items[i].id);
-
-                    // }
-
+                    createdPlaylistInfo = await createYoutubePlaylist(
+                        "KPop",
+                        ytAuth.getToken()
+                    ); //create a playlist based on spotify playlist name
+                    playlists = await getOwnPlaylists(ytAuth.getToken()); //later this will be changed to the length of the spotify playlists
+                    numberOfPlaylists = playlists.items.length;
+                    for (let i = 0; i < numberOfPlaylists; i++) {
+                        //loop through playlist songs and then search them up on youtube then add then to a playlist then we can loop over our spotify playlists and download them
+                        console.log(playlists.items[i].id);
+                    }
                     // try to merge the two files by probably putting index and youtubeIndex into the same directory and then fixing imports and hopefully that way we can use the same port and then go between the two programs to get the spotify data and then put through youtube data
 
                     // console.log(spotifyData.getData());
-
-                    // numberOfPlaylists = playlists.items.length;
-                    // console.log(playlists.items[0].id);
-                    // videoInfo = await searchOnYoutube("", "New Jeans"); //search the song on youtube and then get its ID to add into given playlist
-                    // await insertSongIntoPlaylist(
-                    //     playlists.items[0].id,
-                    //     `${videoInfo.videoID}`,
-                    //     ytAuth.getToken()
-                    // );
+                    videoInfo = await searchOnYoutube("", "New Jeans"); //search the song on youtube and then get its ID to add into given playlist
+                    await insertSongIntoPlaylist(
+                        createdPlaylistInfo.id,
+                        `${videoInfo.videoID}`,
+                        ytAuth.getToken()
+                    );
                 } catch (error) {
                     console.log(error);
                 }
