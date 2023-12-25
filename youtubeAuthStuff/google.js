@@ -124,6 +124,7 @@ passport.use(
                     //so we want to go through the global dictionary and loop through all the keys
                     //for every key, we want to create a playlist then loop through the songs
                     //for every song, we insert the song into the playlist
+                    // then after we have the songs inside the playlist, we can then make a get request on postman to download songs that will list all the songs in every playlist and then download the whole playlist
 
                     playlists = await getOwnPlaylists(ytAuth.getToken()); //later this will be changed to the length of the spotify playlists
                     numberOfPlaylists = playlists.items.length;
