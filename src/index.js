@@ -8,7 +8,7 @@ const passport = require("passport");
 const main = require("../youtubeAuthStuff/google");
 const ytAuth = require("../youtubeAuthStuff/setToken");
 const { getPlaylistAndTracks } = require("../setPlaylistInfo");
-const { downloadVideo, downloadPlaylist } = require("./download");
+const { downloadVideo, downloadPlaylist } = require("../SpotYTFuncs/download");
 const getOwnPlaylists = require("../youtubeAuthStuff/google");
 
 const scopes = [
@@ -108,19 +108,20 @@ app.get("/downloadPlaylist", (req, res) => {
         res.send(`Callback Error: ${error}`);
         return;
     } else {
-        async () => {
-            myPlaylists = await getOwnPlaylists();
-            for (let playlist of myPlaylists) {
-                console.log(myPlaylists); //try to see where we can find URL / playlistID
-
+        (async () => {
+            let myPlaylistsInfo = await getOwnPlaylists(ytAuth.getToken());
+            console.log(myPlaylists); //try to see where we can find URL / playlistID
+            let playlists = myPlaylistsInfo.items;
+            for (let playlist in playlists) {
+                console.log(playlist.id);
+                console.log("\n \n \n \n");
                 // let playlistName = playlist.name;
-                // let playlistURL = playlist.something
+                // let playlistURL = `https://www.youtube.com/playlist?list=${}`
                 // let path = `./${playlistName}`;
                 // downloadPlaylist(path, playlistURL);
-
                 // get all playlists, iterate through every playlist and then we get the name of the playlist along with the URL of the playlist and then we call downloadPlaylist on it
             }
-        };
+        })();
     }
 });
 
