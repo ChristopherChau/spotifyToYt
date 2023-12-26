@@ -41,5 +41,20 @@ async function downloadVideo(path, title, songURL) {
     });
 }
 
-module.exports = createDirectory;
-module.exports = downloadVideo;
+async function downloadPlaylist(path, playlistURL) {
+    await createDirectory(path);
+    const command = `/Users/christofur/documents/yt-dlp-stuff/yt-dlp_macos --output "${path}/%(title)s.%(ext)s" --yes-playlist -i --extract-audio --audio-format mp3 "${playlistURL}"`;
+    exec(command, (error, stdout, stderr) => {
+        if (error) {
+            console.error(`Error: ${error}`);
+            return;
+        }
+        if (stderr) {
+            console.log(stderr);
+            return;
+        }
+        console.log(stdout);
+    });
+}
+
+module.exports = { createDirectory, downloadVideo, downloadPlaylist };

@@ -8,6 +8,8 @@ const passport = require("passport");
 const main = require("../youtubeAuthStuff/google");
 const ytAuth = require("../youtubeAuthStuff/setToken");
 const { getPlaylistAndTracks } = require("../setPlaylistInfo");
+const { downloadVideo, downloadPlaylist } = require("./download");
+const getOwnPlaylists = require("../youtubeAuthStuff/google");
 
 const scopes = [
     "ugc-image-upload",
@@ -97,25 +99,28 @@ app.get("/getPlaylists", (req, res) => {
     }
 });
 
-app.get("/downloadSongs", (req, res) => {
-    const code = req.query.code;
+app.get("/downloadPlaylist", (req, res) => {
     const error = req.query.error;
+    const code = req.query.code;
+
     if (error) {
         console.error("Callback Error:", error);
         res.send(`Callback Error: ${error}`);
         return;
     } else {
-        (async () => {
-            let dictionary = await getPlaylistAndTracks();
-            for (let playlist in dictionary) {
-                for (let songName in playlist) {
-                    // import below but basically we want to go thru every song in the playlist and search up the song and artist which is the value of the key and then we create a path of the playlist and download it
-                    // let songInfo = await searchOnYoutube(songName);
-                    // let path = `./${playlist}`;
-                    // downloadVideo(path, songName, songInfo.videoUrl);
-                }
+        async () => {
+            myPlaylists = await getOwnPlaylists();
+            for (let playlist of myPlaylists) {
+                console.log(myPlaylists); //try to see where we can find URL / playlistID
+
+                // let playlistName = playlist.name;
+                // let playlistURL = playlist.something
+                // let path = `./${playlistName}`;
+                // downloadPlaylist(path, playlistURL);
+
+                // get all playlists, iterate through every playlist and then we get the name of the playlist along with the URL of the playlist and then we call downloadPlaylist on it
             }
-        })();
+        };
     }
 });
 

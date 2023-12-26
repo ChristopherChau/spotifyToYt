@@ -139,26 +139,6 @@ passport.use(
                             await delay(1000);
                         }
                     }
-
-                    //so we want to go through the global dictionary and loop through all the keys
-                    //for every key, we want to create a playlist then loop through the songs
-                    //for every song, we insert the song into the playlist
-                    // then after we have the songs inside the playlist, we can then make a get request on postman to download songs that will list all the songs in every playlist and then download the whole playlist
-
-                    // playlists = await getOwnPlaylists(ytAuth.getToken()); //later this will be changed to the length of the spotify playlists
-                    // numberOfPlaylists = playlists.items.length;
-                    // for (let i = 0; i < numberOfPlaylists; i++) {
-                    //     //loop through playlist songs and then search them up on youtube then add then to a playlist then we can loop over our spotify playlists and download them
-                    //     console.log(playlists.items[i].id);
-                    // }
-
-                    // console.log(spotifyData.getData());
-                    // // videoInfo = await searchOnYoutube("", "New Jeans"); //search the song on youtube and then get its ID to add into given playlist
-                    // // await insertSongIntoPlaylist(
-                    // //     createdPlaylistInfo.id,
-                    // //     `${videoInfo.videoID}`,
-                    // //     ytAuth.getToken()
-                    // // );
                 } catch (error) {
                     console.log(error);
                 }
@@ -167,3 +147,5 @@ passport.use(
         }
     )
 );
+
+module.exports = getOwnPlaylists;

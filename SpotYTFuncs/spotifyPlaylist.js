@@ -33,7 +33,7 @@ async function getUserPlaylists(user) {
 
     // For multiple playlist
     for (let playlist of data.body.items) {
-        if (playlist.name === "Kp") {
+        if (playlist.name === "Throwback") {
             playlists.push(playlist.name);
             let tracks = await getPlayListsTracks(playlist.id, playlist.name);
         }
