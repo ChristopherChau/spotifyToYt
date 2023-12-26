@@ -69,9 +69,6 @@ app.get("/callback", (req, res) => {
 
             auth.setToken(accessToken);
 
-            console.log(`access token: ${accessToken}\n`);
-            console.log(`refresh token: ${refreshToken}\n`);
-            console.log(`Expires in ${expiresIn} seconds\n`);
             res.send("Successful");
 
             setInterval(async () => {

@@ -5,7 +5,7 @@ const VerifyCallback = require("passport-google-oauth20").VerifyCallback;
 const Profile = require("passport-google-oauth20").Profile;
 const ytAuth = require("./setToken");
 const spotifyData = require("../setSpotify");
-const YT_API_KEY = "AIzaSyDEe56vgEU2DSR-3gVEVK0xsA3octKQFI4";
+const YT_API_KEY = "AIzaSyAzDwy1A6PeFgP82Sx0DBDPyzXWCWeIZwo";
 const { getPlaylistAndTracks } = require("../setPlaylistInfo");
 
 async function createYoutubePlaylist(playlistName, accessToken) {
@@ -100,13 +100,15 @@ async function searchOnYoutube(song) {
         return null;
     }
 }
-
+function delay(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+}
 passport.use(
     new Strategy(
         {
             clientID:
-                "36943627344-9nvmr1ssaln2b61evcgjrujgstd81vav.apps.googleusercontent.com",
-            clientSecret: "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",
+                "891305433269-9n4dlkl0j5r4vq5iesqhejb9c7iif0uv.apps.googleusercontent.com",
+            clientSecret: "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",
             callbackURL: "http://localhost:5501/api/auth/google/redirect",
             scope: [
                 "email",
@@ -117,7 +119,6 @@ passport.use(
         },
         async (accessToken, refreshToken, profile, done) => {
             ytAuth.setToken(accessToken);
-            console.log(ytAuth.getToken());
 
             if (ytAuth.getToken() != null) {
                 try {
@@ -135,6 +136,7 @@ passport.use(
                                 songInfo.videoID,
                                 ytAuth.getToken()
                             );
+                            await delay(1000);
                         }
                     }
 

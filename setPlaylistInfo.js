@@ -10,7 +10,7 @@ function setPlaylistAndTracks(key, value) {
 }
 
 function getPlaylistAndTracks() {
-    console.log(dictionary);
+    // console.log(dictionary);
     return dictionary;
 }
 

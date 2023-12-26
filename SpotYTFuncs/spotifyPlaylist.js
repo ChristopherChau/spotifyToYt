@@ -52,8 +52,8 @@ async function getPlayListsTracks(playlistID, playlistName) {
         limit: 100,
         fields: "items",
     });
-    // spotifyData.setData(data); //find out what this data is and why we are setting it to use it for later
-    console.log(data);
+    spotifyData.setData(data); //find out what this data is and why we are setting it to use it for later
+    // console.log(data);
 
     let tracks = [];
     let count = 0;
