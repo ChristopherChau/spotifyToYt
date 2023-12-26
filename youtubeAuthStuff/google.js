@@ -5,8 +5,8 @@ const VerifyCallback = require("passport-google-oauth20").VerifyCallback;
 const Profile = require("passport-google-oauth20").Profile;
 const ytAuth = require("./setToken");
 const spotifyData = require("../setSpotify");
-
 const YT_API_KEY = "AIzaSyDEe56vgEU2DSR-3gVEVK0xsA3octKQFI4";
+const { getPlaylistAndTracks } = require("../setPlaylistInfo");
 
 async function createYoutubePlaylist(playlistName, accessToken) {
     const data = {
@@ -84,9 +84,9 @@ async function insertSongIntoPlaylist(playListID, resourceID, accessToken) {
     }
 }
 
-async function searchOnYoutube(song, artist) {
+async function searchOnYoutube(song) {
     try {
-        const searchQuery = `${song} ${artist} song lyrics`;
+        const searchQuery = `${song} song lyrics`;
         let YT_API_URL = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q=${searchQuery}&type=video&key=${YT_API_KEY}`;
         const response = await axios.get(YT_API_URL);
 
@@ -121,25 +121,42 @@ passport.use(
 
             if (ytAuth.getToken() != null) {
                 try {
+                    let playlistsAndSongs = getPlaylistAndTracks();
+                    for (let playlistName in playlistsAndSongs) {
+                        let songs = playlistsAndSongs[playlistName];
+                        let createdPlaylistInfo = await createYoutubePlaylist(
+                            playlistName,
+                            ytAuth.getToken()
+                        );
+                        for (let songName of songs) {
+                            let songInfo = await searchOnYoutube(songName);
+                            insertSongIntoPlaylist(
+                                createdPlaylistInfo.id,
+                                songInfo.videoID,
+                                ytAuth.getToken()
+                            );
+                        }
+                    }
+
                     //so we want to go through the global dictionary and loop through all the keys
                     //for every key, we want to create a playlist then loop through the songs
                     //for every song, we insert the song into the playlist
                     // then after we have the songs inside the playlist, we can then make a get request on postman to download songs that will list all the songs in every playlist and then download the whole playlist
 
-                    playlists = await getOwnPlaylists(ytAuth.getToken()); //later this will be changed to the length of the spotify playlists
-                    numberOfPlaylists = playlists.items.length;
-                    for (let i = 0; i < numberOfPlaylists; i++) {
-                        //loop through playlist songs and then search them up on youtube then add then to a playlist then we can loop over our spotify playlists and download them
-                        console.log(playlists.items[i].id);
-                    }
+                    // playlists = await getOwnPlaylists(ytAuth.getToken()); //later this will be changed to the length of the spotify playlists
+                    // numberOfPlaylists = playlists.items.length;
+                    // for (let i = 0; i < numberOfPlaylists; i++) {
+                    //     //loop through playlist songs and then search them up on youtube then add then to a playlist then we can loop over our spotify playlists and download them
+                    //     console.log(playlists.items[i].id);
+                    // }
 
-                    console.log(spotifyData.getData());
-                    // videoInfo = await searchOnYoutube("", "New Jeans"); //search the song on youtube and then get its ID to add into given playlist
-                    // await insertSongIntoPlaylist(
-                    //     createdPlaylistInfo.id,
-                    //     `${videoInfo.videoID}`,
-                    //     ytAuth.getToken()
-                    // );
+                    // console.log(spotifyData.getData());
+                    // // videoInfo = await searchOnYoutube("", "New Jeans"); //search the song on youtube and then get its ID to add into given playlist
+                    // // await insertSongIntoPlaylist(
+                    // //     createdPlaylistInfo.id,
+                    // //     `${videoInfo.videoID}`,
+                    // //     ytAuth.getToken()
+                    // // );
                 } catch (error) {
                     console.log(error);
                 }

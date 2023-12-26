@@ -100,6 +100,28 @@ app.get("/getPlaylists", (req, res) => {
     }
 });
 
+app.get("/downloadSongs", (req, res) => {
+    const code = req.query.code;
+    const error = req.query.error;
+    if (error) {
+        console.error("Callback Error:", error);
+        res.send(`Callback Error: ${error}`);
+        return;
+    } else {
+        (async () => {
+            let dictionary = await getPlaylistAndTracks();
+            for (let playlist in dictionary) {
+                for (let songName in playlist) {
+                    // import below but basically we want to go thru every song in the playlist and search up the song and artist which is the value of the key and then we create a path of the playlist and download it
+                    // let songInfo = await searchOnYoutube(songName);
+                    // let path = `./${playlist}`;
+                    // downloadVideo(path, songName, songInfo.videoUrl);
+                }
+            }
+        })();
+    }
+});
+
 async function afterServerStart() {
     console.log("Server is up and running.");
     console.log(`Access token: ${ytAuth.getToken()}`);
