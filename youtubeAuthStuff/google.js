@@ -5,7 +5,7 @@ const VerifyCallback = require("passport-google-oauth20").VerifyCallback;
 const Profile = require("passport-google-oauth20").Profile;
 const ytAuth = require("./setToken");
 const spotifyData = require("../setSpotify");
-const YT_API_KEY = "AIzaSyDEe56vgEU2DSR-3gVEVK0xsA3octKQFI4";
+const YT_API_KEY = "AIzaSyBwOwdQ7FV2w572urX4miDK_tzdcUp0WTw";
 const { getPlaylistAndTracks } = require("../setPlaylistInfo");
 
 async function createYoutubePlaylist(playlistName, accessToken) {
@@ -22,7 +22,7 @@ async function createYoutubePlaylist(playlistName, accessToken) {
 
     try {
         const response = await axios.post(
-            "https://www.googleapis.com/youtube/v3/playlists?part=snippet,status",
+            "https://www.googleapis.com/youtube/v3/playlists?part=id,snippet,status",
             data,
             {
                 headers: {
@@ -90,10 +90,10 @@ async function searchOnYoutube(song) {
         let YT_API_URL = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q=${searchQuery}&type=video&key=${YT_API_KEY}`;
         const response = await axios.get(YT_API_URL);
 
-        const videoID = response.data.items[0].id.videoId;
+        const videoId = response.data.items[0].id.videoId;
         return {
-            videoID,
-            videoUrl: `https://www.youtube.com/watch?v=${videoID}`,
+            videoId,
+            videoUrl: `https://www.youtube.com/watch?v=${videoId}`,
         };
     } catch (err) {
         console.error(`Error searching ${song} on Youtube: ${err}`);
@@ -107,8 +107,8 @@ passport.use(
     new Strategy(
         {
             clientID:
-                "36943627344-9nvmr1ssaln2b61evcgjrujgstd81vav.apps.googleusercontent.com",
-            clientSecret: "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",
+                "45189245319-u6t3nkb067vhcp46u7uggvlmae4kornu.apps.googleusercontent.com",
+            clientSecret: "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",
             callbackURL: "http://localhost:5501/api/auth/google/redirect",
             scope: [
                 "email",
@@ -120,29 +120,44 @@ passport.use(
         async (accessToken, refreshToken, profile, done) => {
             ytAuth.setToken(accessToken);
 
-            // if (ytAuth.getToken() != null) {
-            //     try {
-            //         let playlistsAndSongs = getPlaylistAndTracks();
-            //         for (let playlistName in playlistsAndSongs) {
-            //             let songs = playlistsAndSongs[playlistName];
-            //             let createdPlaylistInfo = await createYoutubePlaylist(
-            //                 playlistName,
-            //                 ytAuth.getToken()
-            //             );
-            //             for (let songName of songs) {
-            //                 let songInfo = await searchOnYoutube(songName);
-            //                 insertSongIntoPlaylist(
-            //                     createdPlaylistInfo.id,
-            //                     songInfo.videoID,
-            //                     ytAuth.getToken()
-            //                 );
-            //                 await delay(1000);
-            //             }
-            //         }
-            //     } catch (error) {
-            //         console.log(error);
-            //     }
-            // }
+            if (ytAuth.getToken() != null) {
+                let playlistsAndSongs = getPlaylistAndTracks();
+                for (let playlistName in playlistsAndSongs) {
+                    let songs = playlistsAndSongs[playlistName];
+                    let createdPlaylistInfo = await createYoutubePlaylist(
+                        playlistName,
+                        ytAuth.getToken()
+                    );
+                    let delayTime = 5000; // Start with a 5 second delay
+
+                    for (let songName of songs) {
+                        try {
+                            let songInfo = await searchOnYoutube(songName);
+                            await insertSongIntoPlaylist(
+                                createdPlaylistInfo.id,
+                                songInfo.videoID,
+                                ytAuth.getToken()
+                            );
+                            await delay(delayTime);
+                        } catch (error) {
+                            console.log(
+                                `Error processing song ${songName}: ${error}`
+                            );
+                            if (
+                                error.response &&
+                                error.response.status === 403
+                            ) {
+                                delayTime += 2000; // Increase delay by 2 seconds
+                                console.log(
+                                    `Increasing delay to ${
+                                        delayTime / 1000
+                                    } seconds`
+                                );
+                            }
+                        }
+                    }
+                }
+            }
             done(null, profile);
         }
     )

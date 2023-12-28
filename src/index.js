@@ -8,8 +8,6 @@ const passport = require("passport");
 const main = require("../youtubeAuthStuff/google");
 const ytAuth = require("../youtubeAuthStuff/setToken");
 const { getPlaylistAndTracks } = require("../setPlaylistInfo");
-const { downloadVideo, downloadPlaylist } = require("../SpotYTFuncs/download");
-const getOwnPlaylists = require("../youtubeAuthStuff/google");
 
 const scopes = [
     "ugc-image-upload",
@@ -68,6 +66,7 @@ app.get("/callback", (req, res) => {
 
             spotifyApi.setAccessToken(accessToken);
             spotifyApi.setRefreshToken(refreshToken);
+            console.log(accessToken);
 
             auth.setToken(accessToken);
 
@@ -99,27 +98,23 @@ app.get("/getPlaylists", (req, res) => {
     }
 });
 
-app.get("/downloadPlaylist", (req, res) => {
-    const error = req.query.error;
+app.get("/downloadSongs", (req, res) => {
     const code = req.query.code;
-
+    const error = req.query.error;
     if (error) {
         console.error("Callback Error:", error);
         res.send(`Callback Error: ${error}`);
         return;
     } else {
         (async () => {
-            let myPlaylistsInfo = await getOwnPlaylists(ytAuth.getToken());
-            console.log(myPlaylists); //try to see where we can find URL / playlistID
-            let playlists = myPlaylistsInfo.items;
-            for (let playlist in playlists) {
-                console.log(playlist.id);
-                console.log("\n \n \n \n");
-                // let playlistName = playlist.name;
-                // let playlistURL = `https://www.youtube.com/playlist?list=${}`
-                // let path = `./${playlistName}`;
-                // downloadPlaylist(path, playlistURL);
-                // get all playlists, iterate through every playlist and then we get the name of the playlist along with the URL of the playlist and then we call downloadPlaylist on it
+            let dictionary = await getPlaylistAndTracks();
+            for (let playlist in dictionary) {
+                for (let songName in playlist) {
+                    // import below but basically we want to go thru every song in the playlist and search up the song and artist which is the value of the key and then we create a path of the playlist and download it
+                    // let songInfo = await searchOnYoutube(songName);
+                    // let path = `./${playlist}`;
+                    // downloadVideo(path, songName, songInfo.videoUrl);
+                }
             }
         })();
     }
