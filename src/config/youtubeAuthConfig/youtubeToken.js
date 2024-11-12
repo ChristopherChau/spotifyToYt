@@ -1,10 +1,10 @@
 let accessToken = null;
 
 module.exports = {
-    setToken: function (token) {
+    youtubeSetToken: function (token) {
         accessToken = token;
     },
-    getToken: function () {
+    youtubeGetToken: function () {
         return accessToken;
     },
 };
