@@ -124,6 +124,7 @@ passport.use(
                 let playlistsAndSongs = getPlaylistAndTracks();
                 for (let playlistName in playlistsAndSongs) {
                     let songs = playlistsAndSongs[playlistName];
+                    console.log(songs)
                     let createdPlaylistInfo = await createYoutubePlaylist(
                         playlistName,
                         ytAuth.getToken()

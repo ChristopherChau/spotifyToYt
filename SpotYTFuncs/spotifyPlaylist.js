@@ -1,7 +1,7 @@
 const axios = require("axios");
 const SpotifyWebApi = require("spotify-web-api-node");
 const auth = require("../src/auth");
-const downloadVideo = require("./download");
+const {downloadVideo} = require("./download");
 const searchOnYoutube = require("./youtube");
 const spotifyData = require("../setSpotify");
 const { setPlaylistAndTracks } = require("../setPlaylistInfo");
@@ -62,14 +62,15 @@ async function getPlayListsTracks(playlistID, playlistName) {
         tracks.push(track);
         let artist = track.artists[0].name;
         let songName = track.name;
-        // let songInfo = await searchOnYoutube(songName, artist); //this returns video id and video url so then we can just get both in two diff variables
-        // let path = `./${playlistName}`;
-        // downloadVideo(path, songName, songInfo.videoUrl);
-        // count++;
+        let songInfo = await searchOnYoutube(songName, artist); //this returns video id and video url so then we can just get both in two diff variables
+        let path = `./${playlistName}`;
+        downloadVideo(path, songName, songInfo.videoUrl);
+        count++;
 
-        // if (count === 1) {
-        //     break;
-        // }
+        if (count === 1) {
+            break;
+        }
+        count += 1
         setPlaylistAndTracks(playlistName, `${songName} ${artist}`);
         // we're able to get all the songs and the artists to use globally
     }
