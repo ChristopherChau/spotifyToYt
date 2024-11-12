@@ -92,10 +92,10 @@ passport.use(
           let playlistsAndSongs = getPlaylistAndTracks();
           for (let playlistName in playlistsAndSongs) {
             let songs = playlistsAndSongs[playlistName];
-            // let createdPlaylistInfo = await createYoutubePlaylist(
-            //   playlistName,
-            //   ytAuth.youtubeGetToken()
-            // );
+            let createdPlaylistInfo = await createYoutubePlaylist(
+              playlistName,
+              ytAuth.youtubeGetToken()
+            );
             // // let delayTime = 5000; // Start with a 5 second delay
   
             // for (let songName of songs) {

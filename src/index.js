@@ -44,48 +44,45 @@ const app = express();
 
 let accessToken = "";
 async function afterServerStart() {
-    console.log("Server is up and running.");
-    console.log(`Access token: ${ytAuth.youtubeGetToken()}`);
+  console.log("Server is up and running.");
+  console.log(`Youtube access token: ${ytAuth.youtubeGetToken()}`);
+}
+
+async function bootstrap(callback) {
+  app.use(
+    session({
+      secret: `${ytAuth.youtubeGetToken()}`, // replace with your own secret key
+      resave: false,
+      saveUninitialized: true,
+    })
+  );
+  //Initialize middleware that will allow us to handle authentication
+  app.use(passport.initialize());
+  passport.serializeUser((user, done) => {
+    done(null, user.id);
+  });
+
+  passport.deserializeUser((id, done) => {
+    User.findById(id, (err, user) => {
+      done(err, user);
+    });
+  });
+  //This will specify the routes that we can take and what to do when we go to these routes
+  app.use("/api/auth", authRoutes);
+
+  try {
+    app.listen(port);
+    // let response = await getOwnPlaylists(ytAuth.youtubeGetToken());
+    // console.log("This is after theresponse)
+    console.log("before callback");
+    callback(); // Call the callback after server startup
+  } catch (err) {
+    console.log(err);
   }
-  
-  async function bootstrap(callback) {
-    app.use(
-      session({
-        secret: `${ytAuth.youtubeGetToken()}`, // replace with your own secret key
-        resave: false,
-        saveUninitialized: true,
-      })
-    );
-    app.use(passport.initialize());
-    passport.serializeUser((user, done) => {
-      done(null, user.id);
-    });
-  
-    passport.deserializeUser((id, done) => {
-      User.findById(id, (err, user) => {
-        done(err, user);
-      });
-    });
-  
-    app.use("/api/auth", authRoutes);
-    // app.use("/", routes); // Use the routes
-  
-    // Error handling middleware
-    app.use((err, req, res, next) => {
-      console.error(err.stack);
-      res.status(500).send('Something broke!');
-    });
-  
-    try {
-      app.listen(port);
-      callback(); // Call the callback after server startup
-    } catch (err) {
-      console.log(err);
-    }
-  }
-  
-  // Call bootstrap with the afterServerStart callback
-  bootstrap(afterServerStart);
+}
+
+// Call bootstrap with the afterServerStart callback
+bootstrap(afterServerStart);
 
 app.get("/login", (req, res) => {
   res.redirect(spotifyApi.createAuthorizeURL(scopes));
