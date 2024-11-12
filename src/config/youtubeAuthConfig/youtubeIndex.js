@@ -12,7 +12,7 @@ const app = express();
 
 async function afterServerStart() {
   console.log("Server is up and running.");
-  console.log(`Access token: ${ytAuth.youtubeGetToken()}`);
+  console.log(`Access token (this is youtubeIndex): ${ytAuth.youtubeGetToken()}`);
 }
 
 async function bootstrap(callback) {

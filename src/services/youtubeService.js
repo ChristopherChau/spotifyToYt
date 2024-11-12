@@ -120,60 +120,64 @@ async function searchOnYoutube(song) {
   }
 }
 
-passport.use(
-  new Strategy(
-    {
-      clientID: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: process.env.GOOGLE_CALLBACK_URL,
-      scope: [
-        "email",
-        "profile",
-        "https://www.googleapis.com/auth/youtube",
-        "https://www.googleapis.com/auth/youtube.force-ssl",
-      ],
-    },
-    async (accessToken, refreshToken, profile, done) => {
-      ytAuth.youtubeSetToken(accessToken);
+// passport.use(
+//   new Strategy(
+//     {
+//       clientID: process.env.GOOGLE_CLIENT_ID,
+//       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+//       callbackURL: process.env.GOOGLE_CALLBACK_URL,
+//       scope: [
+//         "email",
+//         "profile",
+//         "https://www.googleapis.com/auth/youtube",
+//         "https://www.googleapis.com/auth/youtube.force-ssl",
+//       ],
+//     },
+//     async (accessToken, refreshToken, profile, done) => {
+//       ytAuth.youtubeSetToken(accessToken);
 
-      if (ytAuth.youtubeGetToken() != null) {
-        let playlistsAndSongs = getPlaylistAndTracks();
-        for (let playlistName in playlistsAndSongs) {
-          let songs = playlistsAndSongs[playlistName];
-          let createdPlaylistInfo = await createYoutubePlaylist(
-            playlistName,
-            ytAuth.youtubeGetToken()
-          );
-          let delayTime = 5000; // Start with a 5 second delay
+//       if (ytAuth.youtubeGetToken() != null) {
+//         let playlistsAndSongs = getPlaylistAndTracks();
+//         for (let playlistName in playlistsAndSongs) {
+//           let songs = playlistsAndSongs[playlistName];
+//           let createdPlaylistInfo = await createYoutubePlaylist(
+//             playlistName,
+//             ytAuth.youtubeGetToken()
+//           );
+//           let delayTime = 5000; // Start with a 5 second delay
 
-          for (let songName of songs) {
-            try {
-              let songInfo = await searchOnYoutube(songName);
-              await insertSongIntoPlaylist(
-                createdPlaylistInfo.id,
-                songInfo.videoId,
-                ytAuth.youtubeGetToken()
-              );
-              await delay(delayTime);
-            } catch (error) {
-              console.log(
-                `Error processing song ${songName}: ${error}. Video ID: ${songInfo.videoId}}`
-              );
-              if (error.response && error.response.status === 403) {
-                delayTime += 2000; // Increase delay by 2 seconds
-                console.log(`Increasing delay to ${delayTime / 1000} seconds`);
-              }
-            }
-          }
-        }
-        console.log(`total quotas used: ${quotas}`);
-      }
-      done(null, profile);
-    }
-  )
-);
+//           for (let songName of songs) {
+//             try {
+//               let songInfo = await searchOnYoutube(songName);
+//               await insertSongIntoPlaylist(
+//                 createdPlaylistInfo.id,
+//                 songInfo.videoId,
+//                 ytAuth.youtubeGetToken()
+//               );
+//               await delay(delayTime);
+//             } catch (error) {
+//               console.log(
+//                 `Error processing song ${songName}: ${error}. Video ID: ${songInfo.videoId}}`
+//               );
+//               if (error.response && error.response.status === 403) {
+//                 delayTime += 2000; // Increase delay by 2 seconds
+//                 console.log(`Increasing delay to ${delayTime / 1000} seconds`);
+//               }
+//             }
+//           }
+//         }
+//         console.log(`total quotas used: ${quotas}`);
+//       }
+//       done(null, profile);
+//     }
+//   )
+// );
 
 
-module.exports = getOwnPlaylists;
-module.exports = searchOnYoutube;
-module.exports = createYoutubePlaylist
+module.exports = {
+    createYoutubePlaylist,
+    searchOnYoutube,
+    getOwnPlaylists,
+    insertSongIntoPlaylist,
+    delay
+};

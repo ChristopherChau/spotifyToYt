@@ -18,7 +18,6 @@ async function getMyData() {
         setTokenData();
         const me = await spotifyApi.getMe();
         getUserPlaylists(me.body.id);
-        console.log("getting user data");
     })().catch((err) => {
         console.error(err);
     });
