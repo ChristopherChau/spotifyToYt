@@ -1,5 +1,7 @@
-const YT_API_KEY = "AIzaSyDEe56vgEU2DSR-3gVEVK0xsA3octKQFI4";
+require('dotenv').config();
 const axios = require("axios");
+
+const YT_API_KEY = process.env.YT_API_KEY;
 
 async function searchOnYoutube(song) {
     try {

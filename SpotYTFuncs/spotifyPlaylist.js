@@ -21,7 +21,7 @@ async function getMyData() {
         setTokenData();
         const me = await spotifyApi.getMe();
         getUserPlaylists(me.body.id);
-        // console.log("getting user data");
+        console.log("getting user data");
     })().catch((err) => {
         console.error(err);
     });
@@ -33,17 +33,11 @@ async function getUserPlaylists(user) {
 
     // For multiple playlist
     for (let playlist of data.body.items) {
-        if (playlist.name === "Throwback") {
+        if (playlist.name === "Kp") {
             playlists.push(playlist.name);
             let tracks = await getPlayListsTracks(playlist.id, playlist.name);
         }
     }
-
-    // One Playlist
-    // let playlist = data.body.items[0];
-    // console.log("\n\n\n" + playlist.name);
-    // let tracks = await getPlayListsTracks(playlist.id, playlist.name);
-    //create yt playlist here?
 }
 
 async function getPlayListsTracks(playlistID, playlistName) {
@@ -53,24 +47,21 @@ async function getPlayListsTracks(playlistID, playlistName) {
         fields: "items",
     });
     spotifyData.setData(data); //find out what this data is and why we are setting it to use it for later
-    // console.log(data);
+    console.log(data);
 
     let tracks = [];
     let count = 0;
     for (let trackObj of data.body.items) {
+        if (count  === 5){
+            console.log("reaching 5 count limit");
+            break;
+        }
         const track = trackObj.track;
         tracks.push(track);
         let artist = track.artists[0].name;
         let songName = track.name;
-        // let songInfo = await searchOnYoutube(songName, artist); //this returns video id and video url so then we can just get both in two diff variables
-        // let path = `./${playlistName}`;
-        // downloadVideo(path, songName, songInfo.videoUrl);
-        // count++;
-
-        // if (count === 1) {
-        //     break;
-        // }
         setPlaylistAndTracks(playlistName, `${songName} ${artist}`);
+        count += 1;
         // we're able to get all the songs and the artists to use globally
     }
 

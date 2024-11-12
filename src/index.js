@@ -8,6 +8,8 @@ const passport = require("passport");
 const main = require("../youtubeAuthStuff/google");
 const ytAuth = require("../youtubeAuthStuff/setToken");
 const { getPlaylistAndTracks } = require("../setPlaylistInfo");
+const getOwnPlaylists = require("../youtubeAuthStuff/google");
+const { downloadPlaylist } = require("../SpotYTFuncs/download");
 
 const scopes = [
     "ugc-image-upload",
@@ -98,25 +100,14 @@ app.get("/getPlaylists", (req, res) => {
     }
 });
 
-app.get("/downloadSongs", (req, res) => {
-    const code = req.query.code;
-    const error = req.query.error;
-    if (error) {
-        console.error("Callback Error:", error);
-        res.send(`Callback Error: ${error}`);
-        return;
-    } else {
-        (async () => {
-            let dictionary = await getPlaylistAndTracks();
-            for (let playlist in dictionary) {
-                for (let songName in playlist) {
-                    // import below but basically we want to go thru every song in the playlist and search up the song and artist which is the value of the key and then we create a path of the playlist and download it
-                    // let songInfo = await searchOnYoutube(songName);
-                    // let path = `./${playlist}`;
-                    // downloadVideo(path, songName, songInfo.videoUrl);
-                }
-            }
-        })();
+app.get("/downloadSongs", async (req, res) => {
+    let response = await getOwnPlaylists(ytAuth.getToken());
+    for (let playlistName of response.data.items) {
+        if (playlistName.snippet.title === "Kp") {
+            let path = `./${playlistName.snippet.title}`;
+            let playlistURL = `https://www.youtube.com/playlist?list=${playlistName.id}`;
+            downloadPlaylist(path, playlistURL);
+        }
     }
 });
 

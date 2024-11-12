@@ -57,4 +57,4 @@ async function downloadPlaylist(path, playlistURL) {
     });
 }
 
-module.exports = { createDirectory, downloadVideo, downloadPlaylist };
+module.exports = { createDirectory, downloadVideo, downloadPlaylist};

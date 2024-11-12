@@ -4,6 +4,7 @@ const authRoutes = require("./googleAuth");
 const passport = require("passport");
 const main = require("./google");
 const ytAuth = require("./setToken");
+const tokenHandler = require("../src/middlewares/tokenHandler")
 
 require("./google");
 

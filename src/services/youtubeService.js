@@ -1,12 +1,34 @@
 const axios = require("axios");
+const { YT_API_KEY } = require("../config/youtubeConfig");
+
+async function searchOnYoutube(song) {
+    const searchQuery = `${song} song lyrics`;
+    const YT_API_URL = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q=${searchQuery}&type=video&key=${YT_API_KEY}`;
+    const response = await axios.get(YT_API_URL);
+    const videoID = response.data.items[0].id.videoId;
+    return {
+        videoID,
+        videoUrl: `https://www.youtube.com/watch?v=${videoID}`,
+    };
+}
+
+module.exports = { searchOnYoutube };
+
+
+const axios = require("axios");
 const passport = require("passport");
 const Strategy = require("passport-google-oauth20").Strategy;
 const VerifyCallback = require("passport-google-oauth20").VerifyCallback;
 const Profile = require("passport-google-oauth20").Profile;
 const ytAuth = require("./setToken");
 const spotifyData = require("../setSpotify");
-const YT_API_KEY = "AIzaSyBwOwdQ7FV2w572urX4miDK_tzdcUp0WTw";
+const tokenHandler = require("../src/middlewares/tokenHandler");
+require('dotenv').config();
+
+const YT_API_KEY = process.env.YT_API_KEY;
 const { getPlaylistAndTracks } = require("../setPlaylistInfo");
+
+let quotas = 0;
 
 async function createYoutubePlaylist(playlistName, accessToken) {
     const data = {
@@ -16,7 +38,7 @@ async function createYoutubePlaylist(playlistName, accessToken) {
             defaultLanguage: "en",
         },
         status: {
-            privacyStatus: "private",
+            privacyStatus: "public",
         },
     };
 
@@ -32,6 +54,7 @@ async function createYoutubePlaylist(playlistName, accessToken) {
             }
         );
 
+        quotas += 50;
         return response.data;
     } catch (error) {
         console.error(`Failed to create YouTube playlist: ${error}`);
@@ -50,7 +73,8 @@ async function getOwnPlaylists(accessToken) {
                 },
             }
         );
-        return response.data;
+        quotas += 1;
+        return response;
     } catch (error) {
         console.error(`Failed to get YouTube playlists: ${error}`);
         throw error;
@@ -82,15 +106,21 @@ async function insertSongIntoPlaylist(playListID, resourceID, accessToken) {
         console.error(`Failed to insert song into playlist: ${error}`);
         throw error;
     }
+    quotas += 50;
 }
 
 async function searchOnYoutube(song) {
     try {
         const searchQuery = `${song} song lyrics`;
         let YT_API_URL = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q=${searchQuery}&type=video&key=${YT_API_KEY}`;
-        const response = await axios.get(YT_API_URL);
+        const response = await axios.get(YT_API_URL, {
+            headers: {
+                Authorization: `Bearer ${ytAuth.getToken()}`,
+            },
+        });
 
         const videoId = response.data.items[0].id.videoId;
+        quotas += 100;
         return {
             videoId,
             videoUrl: `https://www.youtube.com/watch?v=${videoId}`,
@@ -106,10 +136,9 @@ function delay(ms) {
 passport.use(
     new Strategy(
         {
-            clientID:
-                "45189245319-u6t3nkb067vhcp46u7uggvlmae4kornu.apps.googleusercontent.com",
-            clientSecret: "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",
-            callbackURL: "http://localhost:5501/api/auth/google/redirect",
+            clientID: process.env.GOOGLE_CLIENT_ID,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+            callbackURL: process.env.GOOGLE_CALLBACK_URL,
             scope: [
                 "email",
                 "profile",
@@ -141,7 +170,7 @@ passport.use(
                             await delay(delayTime);
                         } catch (error) {
                             console.log(
-                                `Error processing song ${songName}: ${error}`
+                                `Error processing song ${songName}: ${error}. Video ID: ${songInfo.videoId}}`
                             );
                             if (
                                 error.response &&
@@ -157,6 +186,7 @@ passport.use(
                         }
                     }
                 }
+                console.log(`total quotas used: ${quotas}`);
             }
             done(null, profile);
         }
