@@ -96,18 +96,20 @@ passport.use(
               playlistName,
               ytAuth.youtubeGetToken()
             );
-            // // let delayTime = 5000; // Start with a 5 second delay
+            // let delayTime = 5000; // Start with a 5 second delay
   
-            // for (let songName of songs) {
-            //   try {
-            //     let songInfo = await searchOnYoutube(songName);
-            //     await insertSongIntoPlaylist(
-            //       // Your code to insert song into playlist
-            //     );
-            //   } catch (error) {
-            //     console.error(`Error inserting song ${songName}:`, error);
-            //   }
-            // }
+            for (let songName of songs) {
+              try {
+                  let songInfo = await searchOnYoutube(songName);
+                await insertSongIntoPlaylist(
+                    createdPlaylistInfo.id,
+                    songInfo.videoId,
+                    ytAuth.youtubeGetToken()
+                    );
+              } catch (error) {
+                console.error(`Error inserting song ${songName}:`, error);
+              }
+            }
           }
         }
         done(null, profile);
