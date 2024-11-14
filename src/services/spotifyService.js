@@ -48,7 +48,7 @@ async function getPlayListsTracks(playlistID, playlistName) {
     let tracks = [];
     let count = 0;
     for (let trackObj of data.body.items) {
-        if (count  === 5){
+        if (count === 2){
             console.log("reaching 5 count limit");
             break;
         }

@@ -106,11 +106,14 @@ const express = require("express");
 const spotifyApi = require("../config/spotifyConfig/spotifyConfig");
 const getMyData = require("../services/spotifyService");
 const { getPlaylistAndTracks } = require("../../setPlaylistInfo");
-const { downloadPlaylist } = require("../../SpotYTFuncs/download");
-// const { downloadPlaylist } = require("../utils/utils")
+const {downloadVideo} = require("../utils/utils")
 const ytAuth = require("../config/youtubeAuthConfig/youtubeToken");
 const getOwnPlaylists = require("../config/youtubeAuthConfig/youtubeConfig");
 const auth = require("../config/spotifyConfig/spotifyToken");
+const {searchOnYoutube} = require("../services/youtubeService");
+require('../config/youtubeAuthConfig/youtubeConfig'); // Update path accordingly
+
+
 
 const router = express.Router();
 
@@ -178,16 +181,74 @@ router.get("/callback", (req, res) => {
     });
 });
 
-router.get("/getPlaylists", (req, res) => {
-  const accessToken = ytAuth.youtubeGetToken();
-  if (!accessToken) {
-    console.log("No token available");
-    res.send("No token available");
-  } else {
-    console.log("In playlist");
-    res.send("Successful");
-    getPlaylistAndTracks();
-  }
-});
+router.get("/getPlaylists", async (req, res) => {
+    try {
+      const accessToken = ytAuth.youtubeGetToken();
+  
+      if (!accessToken) {
+        console.log("No YouTube token available.");
+        return res.status(401).send("YouTube token missing. Please log in.");
+      }
+  
+      console.log("Fetching playlists...");
+      const playlists = await getPlaylistAndTracks();
+  
+      if (playlists && Object.keys(playlists).length > 0) {
+        res.status(200).json({
+          message: "Playlists fetched successfully.",
+          playlists,
+        });
+      } else {
+        res.status(200).json({ message: "No playlists available." });
+      }
+    } catch (error) {
+      console.error("Error fetching playlists:", error);
+      res.status(500).send("An error occurred while fetching playlists.");
+    }
+  });
+
+  router.get("/downloadSongs", async (req, res) => {
+    const error = req.query.error;
+    const code = req.query.code;
+  
+    if (error) {
+      console.error("Callback Error:", error);
+      return res.status(400).send(`Callback Error: ${error}`);
+    }
+  
+    try {
+      const playlists = await getPlaylistAndTracks();
+  
+      if (!playlists || Object.keys(playlists).length === 0) {
+        return res.status(404).send("No playlists found for download.");
+      }
+  
+      console.log("Starting playlist download...");
+  
+      await (async () => {
+        for (const playlistName in playlists) {
+          const songs = playlists[playlistName];
+          const playlistPath = `./downloads/${playlistName}`;
+  
+          for (const songName of songs) {
+            try {
+              const songInfo = await searchOnYoutube(songName);
+              await downloadVideo(playlistPath, songName, songInfo.videoUrl);
+  
+              console.log(`Downloaded song: ${songName} to playlist: ${playlistName}`);
+            } catch (error) {
+              console.error(`Failed to download song: ${songName} -`, error.message);
+            }
+          }
+        }
+      })();
+  
+      res.status(200).send("Songs are being downloaded as per requested playlists.");
+    } catch (error) {
+      console.error("Error during playlist download:", error);
+      res.status(500).send("An error occurred while downloading songs.");
+    }
+  });
+  
 
 module.exports = router;
