@@ -1,7 +1,7 @@
 const fs = require('fs')
 const { exec } = require('child_process')
 
-async function createDirectory(path) {
+async function createDirectory (path) {
   return new Promise((resolve, reject) => {
     fs.access(path, (error) => {
       if (error) {
@@ -21,8 +21,8 @@ async function createDirectory(path) {
   })
 }
 
-async function downloadVideo(path, title, songURL) {
-  let outputDirectory = `--output "${path}/${title}.mp3"`
+async function downloadVideo (path, title, songURL) {
+  const outputDirectory = `--output "${path}/${title}.mp3"`
   if (fs.existsSync(outputDirectory)) {
     console.log(`File ${title}.mp3 already exists. Skipping download.`)
     return
@@ -41,7 +41,7 @@ async function downloadVideo(path, title, songURL) {
   })
 }
 
-async function downloadPlaylist(path, playlistURL) {
+async function downloadPlaylist (path, playlistURL) {
   await createDirectory(path)
   const command = `/Users/christofur/documents/yt-dlp-stuff/yt-dlp_macos --output "${path}/%(title)s.%(ext)s" --yes-playlist -i --extract-audio --audio-format mp3 "${playlistURL}"`
   exec(command, (error, stdout, stderr) => {

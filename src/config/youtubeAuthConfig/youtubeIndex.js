@@ -10,22 +10,22 @@ require('./youtubeConfig')
 const port = process.env.port || 5501
 const app = express()
 
-async function afterServerStart() {
+async function afterServerStart () {
   console.log('Server is up and running.')
   console.log(
-    `Access token (this is youtubeIndex): ${ytAuth.youtubeGetToken()}`,
+    `Access token (this is youtubeIndex): ${ytAuth.youtubeGetToken()}`
   )
 }
 
-async function bootstrap(callback) {
+async function bootstrap (callback) {
   app.use(
     session({
       secret: `${ytAuth.youtubeGetToken()}`,
       resave: false,
-      saveUninitialized: true,
-    }),
+      saveUninitialized: true
+    })
   )
-  //Initialize middleware that will allow us to handle authentication
+  // Initialize middleware that will allow us to handle authentication
   app.use(passport.initialize())
   passport.serializeUser((user, done) => {
     done(null, user.id)
@@ -36,7 +36,7 @@ async function bootstrap(callback) {
       done(err, user)
     })
   })
-  //This will specify the routes that we can take and what to do when we go to these routes
+  // This will specify the routes that we can take and what to do when we go to these routes
   app.use('/api/auth', authRoutes)
 
   try {

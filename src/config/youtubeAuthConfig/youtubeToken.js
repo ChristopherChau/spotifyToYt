@@ -6,5 +6,5 @@ module.exports = {
   },
   youtubeGetToken: function () {
     return accessToken
-  },
+  }
 }

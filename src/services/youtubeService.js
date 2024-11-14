@@ -13,20 +13,20 @@ const { getPlaylistAndTracks } = require('../../setPlaylistInfo')
 
 let quotas = 0
 
-function delay(ms) {
+function delay (ms) {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
-async function createYoutubePlaylist(playlistName, accessToken) {
+async function createYoutubePlaylist (playlistName, accessToken) {
   const data = {
     snippet: {
       title: playlistName,
       description: 'Playlist created from Spotify',
-      defaultLanguage: 'en',
+      defaultLanguage: 'en'
     },
     status: {
-      privacyStatus: 'public',
-    },
+      privacyStatus: 'public'
+    }
   }
 
   try {
@@ -36,9 +36,9 @@ async function createYoutubePlaylist(playlistName, accessToken) {
       {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
-        },
-      },
+          Authorization: `Bearer ${accessToken}`
+        }
+      }
     )
 
     quotas += 50
@@ -50,16 +50,16 @@ async function createYoutubePlaylist(playlistName, accessToken) {
   }
 }
 
-async function getOwnPlaylists(accessToken) {
+async function getOwnPlaylists (accessToken) {
   try {
     const response = await axios.get(
       'https://www.googleapis.com/youtube/v3/playlists?part=id,snippet&mine=true',
       {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
-        },
-      },
+          Authorization: `Bearer ${accessToken}`
+        }
+      }
     )
     quotas += 1
     return response
@@ -69,15 +69,15 @@ async function getOwnPlaylists(accessToken) {
   }
 }
 
-async function insertSongIntoPlaylist(playListID, resourceID, accessToken) {
+async function insertSongIntoPlaylist (playListID, resourceID, accessToken) {
   const data = {
     snippet: {
       playlistId: playListID, // Changed from playListId to playlistId
       resourceId: {
         kind: 'youtube#video',
-        videoId: `${resourceID}`,
-      },
-    },
+        videoId: `${resourceID}`
+      }
+    }
   }
   try {
     const response = await axios.post(
@@ -86,9 +86,9 @@ async function insertSongIntoPlaylist(playListID, resourceID, accessToken) {
       {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
-        },
-      },
+          Authorization: `Bearer ${accessToken}`
+        }
+      }
     )
     return response.data
   } catch (error) {
@@ -98,21 +98,21 @@ async function insertSongIntoPlaylist(playListID, resourceID, accessToken) {
   quotas += 50
 }
 
-async function searchOnYoutube(song) {
+async function searchOnYoutube (song) {
   try {
     const searchQuery = `${song} song lyrics`
-    let YT_API_URL = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q=${searchQuery}&type=video&key=${YT_API_KEY}`
+    const YT_API_URL = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q=${searchQuery}&type=video&key=${YT_API_KEY}`
     const response = await axios.get(YT_API_URL, {
       headers: {
-        Authorization: `Bearer ${ytAuth.youtubeGetToken()}`,
-      },
+        Authorization: `Bearer ${ytAuth.youtubeGetToken()}`
+      }
     })
 
     const videoId = response.data.items[0].id.videoId
     quotas += 100
     return {
       videoId,
-      videoUrl: `https://www.youtube.com/watch?v=${videoId}`,
+      videoUrl: `https://www.youtube.com/watch?v=${videoId}`
     }
   } catch (err) {
     console.error(`Error searching ${song} on Youtube: ${err}`)
@@ -178,5 +178,5 @@ module.exports = {
   searchOnYoutube,
   getOwnPlaylists,
   insertSongIntoPlaylist,
-  delay,
+  delay
 }

@@ -9,12 +9,12 @@ const {
   getOwnPlaylists,
   createYoutubePlaylist,
   insertSongIntoPlaylist,
-  delay,
+  delay
 } = require('../../services/youtubeService')
 
 const jwt = require('jsonwebtoken')
 
-function decodeAccessToken(token) {
+function decodeAccessToken (token) {
   const decoded = jwt.decode(token, { complete: true })
   console.log('Decoded Access Token:', decoded)
 }
@@ -82,29 +82,29 @@ passport.use(
         'email',
         'profile',
         'https://www.googleapis.com/auth/youtube',
-        'https://www.googleapis.com/auth/youtube.force-ssl',
-      ],
+        'https://www.googleapis.com/auth/youtube.force-ssl'
+      ]
     },
     async (accessToken, refreshToken, profile, done) => {
       ytAuth.youtubeSetToken(accessToken)
 
       if (ytAuth.youtubeGetToken() != null) {
-        let playlistsAndSongs = getPlaylistAndTracks()
-        for (let playlistName in playlistsAndSongs) {
-          let songs = playlistsAndSongs[playlistName]
-          let createdPlaylistInfo = await createYoutubePlaylist(
+        const playlistsAndSongs = getPlaylistAndTracks()
+        for (const playlistName in playlistsAndSongs) {
+          const songs = playlistsAndSongs[playlistName]
+          const createdPlaylistInfo = await createYoutubePlaylist(
             playlistName,
-            ytAuth.youtubeGetToken(),
+            ytAuth.youtubeGetToken()
           )
           // let delayTime = 5000; // Start with a 5 second delay
 
-          for (let songName of songs) {
+          for (const songName of songs) {
             try {
-              let songInfo = await searchOnYoutube(songName)
+              const songInfo = await searchOnYoutube(songName)
               await insertSongIntoPlaylist(
                 createdPlaylistInfo.id,
                 songInfo.videoId,
-                ytAuth.youtubeGetToken(),
+                ytAuth.youtubeGetToken()
               )
             } catch (error) {
               console.error(`Error inserting song ${songName}:`, error)
@@ -113,8 +113,8 @@ passport.use(
         }
       }
       done(null, profile)
-    },
-  ),
+    }
+  )
 )
 
 module.exports = getOwnPlaylists
