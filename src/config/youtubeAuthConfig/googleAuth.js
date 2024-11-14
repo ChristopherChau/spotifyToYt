@@ -12,4 +12,3 @@ router.get('/google/redirect', passport.authenticate('google'), (req, res) =>
 
 module.exports = router
 
-// this is the file that leads users to the authentication page where they can log in by google
