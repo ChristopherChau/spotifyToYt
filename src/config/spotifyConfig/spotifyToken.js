@@ -1,14 +1,14 @@
-let accessToken = "";
+let accessToken = ''
 
 function spotifySetToken(token) {
-    accessToken = token;
+  accessToken = token
 }
 
 function spotifyGetToken() {
-    return accessToken;
+  return accessToken
 }
 
 module.exports = {
-    spotifySetToken,
-    spotifyGetToken,
-};
+  spotifySetToken,
+  spotifyGetToken,
+}

@@ -1,71 +1,71 @@
-const axios = require("axios");
-const YT_API_KEY = process.env.YT_API_KEY;
-const passport = require("passport");
-const Strategy = require("passport-google-oauth20").Strategy;
-const VerifyCallback = require("passport-google-oauth20").VerifyCallback;
+const axios = require('axios')
+const YT_API_KEY = process.env.YT_API_KEY
+const passport = require('passport')
+const Strategy = require('passport-google-oauth20').Strategy
+const VerifyCallback = require('passport-google-oauth20').VerifyCallback
 // const Profile = require("passport-google-oauth20").Profile;
-const ytAuth = require("../config/youtubeAuthConfig/youtubeToken");
+const ytAuth = require('../config/youtubeAuthConfig/youtubeToken')
 // const spotifyData = require("../setSpotify");
 // const tokenHandler = require("../src/middlewares/tokenHandler");
-require("dotenv").config();
+require('dotenv').config()
 
-const { getPlaylistAndTracks } = require("../../setPlaylistInfo");
+const { getPlaylistAndTracks } = require('../../setPlaylistInfo')
 
-let quotas = 0;
+let quotas = 0
 
 function delay(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
 async function createYoutubePlaylist(playlistName, accessToken) {
   const data = {
     snippet: {
       title: playlistName,
-      description: "Playlist created from Spotify",
-      defaultLanguage: "en",
+      description: 'Playlist created from Spotify',
+      defaultLanguage: 'en',
     },
     status: {
-      privacyStatus: "public",
+      privacyStatus: 'public',
     },
-  };
+  }
 
   try {
     const response = await axios.post(
-      "https://www.googleapis.com/youtube/v3/playlists?part=id,snippet,status",
+      'https://www.googleapis.com/youtube/v3/playlists?part=id,snippet,status',
       data,
       {
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${accessToken}`,
         },
-      }
-    );
+      },
+    )
 
-    quotas += 50;
-    return response.data;
+    quotas += 50
+    return response.data
   } catch (error) {
-    console.error(`Failed to create YouTube playlist: ${error}`);
+    console.error(`Failed to create YouTube playlist: ${error}`)
     // You can throw the error again to let the caller handle it
-    throw error;
+    throw error
   }
 }
 
 async function getOwnPlaylists(accessToken) {
   try {
     const response = await axios.get(
-      "https://www.googleapis.com/youtube/v3/playlists?part=id,snippet&mine=true",
+      'https://www.googleapis.com/youtube/v3/playlists?part=id,snippet&mine=true',
       {
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${accessToken}`,
         },
-      }
-    );
-    quotas += 1;
-    return response;
+      },
+    )
+    quotas += 1
+    return response
   } catch (error) {
-    console.error(`Failed to get YouTube playlists: ${error}`);
-    throw error;
+    console.error(`Failed to get YouTube playlists: ${error}`)
+    throw error
   }
 }
 
@@ -74,49 +74,49 @@ async function insertSongIntoPlaylist(playListID, resourceID, accessToken) {
     snippet: {
       playlistId: playListID, // Changed from playListId to playlistId
       resourceId: {
-        kind: "youtube#video",
+        kind: 'youtube#video',
         videoId: `${resourceID}`,
       },
     },
-  };
+  }
   try {
     const response = await axios.post(
-      "https://www.googleapis.com/youtube/v3/playlistItems?part=contentDetails,id,status,snippet",
+      'https://www.googleapis.com/youtube/v3/playlistItems?part=contentDetails,id,status,snippet',
       data,
       {
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${accessToken}`,
         },
-      }
-    );
-    return response.data;
+      },
+    )
+    return response.data
   } catch (error) {
-    console.error(`Failed to insert song into playlist: ${error}`);
-    throw error;
+    console.error(`Failed to insert song into playlist: ${error}`)
+    throw error
   }
-  quotas += 50;
+  quotas += 50
 }
 
 async function searchOnYoutube(song) {
   try {
-    const searchQuery = `${song} song lyrics`;
-    let YT_API_URL = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q=${searchQuery}&type=video&key=${YT_API_KEY}`;
+    const searchQuery = `${song} song lyrics`
+    let YT_API_URL = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q=${searchQuery}&type=video&key=${YT_API_KEY}`
     const response = await axios.get(YT_API_URL, {
       headers: {
         Authorization: `Bearer ${ytAuth.youtubeGetToken()}`,
       },
-    });
+    })
 
-    const videoId = response.data.items[0].id.videoId;
-    quotas += 100;
+    const videoId = response.data.items[0].id.videoId
+    quotas += 100
     return {
       videoId,
       videoUrl: `https://www.youtube.com/watch?v=${videoId}`,
-    };
+    }
   } catch (err) {
-    console.error(`Error searching ${song} on Youtube: ${err}`);
-    return null;
+    console.error(`Error searching ${song} on Youtube: ${err}`)
+    return null
   }
 }
 
@@ -173,11 +173,10 @@ async function searchOnYoutube(song) {
 //   )
 // );
 
-
 module.exports = {
-    createYoutubePlaylist,
-    searchOnYoutube,
-    getOwnPlaylists,
-    insertSongIntoPlaylist,
-    delay
-};
+  createYoutubePlaylist,
+  searchOnYoutube,
+  getOwnPlaylists,
+  insertSongIntoPlaylist,
+  delay,
+}

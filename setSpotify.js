@@ -1,15 +1,15 @@
 // setSpotify.js
-let data;
+let data
 
 function setData(dataFromAPI) {
-    data = dataFromAPI;
+  data = dataFromAPI
 }
 
 function getData() {
-    return data;
+  return data
 }
 
 module.exports = {
-    setData: setData,
-    getData: getData,
-};
+  setData: setData,
+  getData: getData,
+}
