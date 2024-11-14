@@ -1,17 +1,16 @@
 // dictionaryModule.js
-let dictionary = {};
+const dictionary = {}
 
-function setPlaylistAndTracks(key, value) {
-    if (dictionary[key]) {
-        dictionary[key].push(value);
-    } else {
-        dictionary[key] = [value];
-    }
+function setPlaylistAndTracks (key, value) {
+  if (dictionary[key]) {
+    dictionary[key].push(value)
+  } else {
+    dictionary[key] = [value]
+  }
 }
 
-function getPlaylistAndTracks() {
-    console.log(dictionary);
-    return dictionary;
+function getPlaylistAndTracks () {
+  return dictionary
 }
 
-module.exports = { setPlaylistAndTracks, getPlaylistAndTracks };
+module.exports = { setPlaylistAndTracks, getPlaylistAndTracks }
