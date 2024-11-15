@@ -1,8 +1,6 @@
 # Spotify to YouTube Converter 
 
-  [![Spotify](https://img.shields.io/badge/Spotify-1ED760?&style=for-the-badge&logo=spotify&logoColor=white)](https://spotify.com) [![YouTube](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtube.com)
-
-<img src="[{BadgeURLHere}](https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.freepik.com%2Fpremium-vector%2Fblack-arrow-pointing-right-icon_135128172.htm&psig=AOvVaw1QZuCApnqrGEkrb-9keheO&ust=1731800356533000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCIiU8JrB34kDFQAAAAAdAAAAABAE)" />
+  [![Spotify](https://img.shields.io/badge/Spotify-1ED760?&style=for-the-badge&logo=spotify&logoColor=white)](https://spotify.com) :arrow_right: [![YouTube](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtube.com) :arrow_right: :computer:
 
 
 
