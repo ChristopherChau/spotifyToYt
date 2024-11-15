@@ -4,29 +4,28 @@ const session = require('express-session')
 const passport = require('passport')
 const authRoutes = require('./config/youtubeAuthConfig/googleAuth')
 const ytAuth = require('./config/youtubeAuthConfig/youtubeToken')
-const routes = require('./routes/routes') // Import the routes
-
+const routes = require('./routes/routes')
 const port = process.env.PORT || 5501
 const app = express()
 
-async function afterServerStart () {
+async function afterServerStart() {
   console.log('Server is up and running.')
-  console.log(`Access token: ${ytAuth.youtubeGetToken()}`)
 }
 
-async function bootstrap (callback) {
+async function bootstrap(callback) {
   app.use(
     session({
       secret: `${ytAuth.youtubeGetToken()}`, // Replace with your own secret key
       resave: false,
-      saveUninitialized: true
-    })
+      saveUninitialized: true,
+    }),
   )
 
   app.use(passport.initialize())
   passport.serializeUser((user, done) => done(null, user.id))
   passport.deserializeUser((id, done) =>
-    User.findById(id, (err, user) => done(err, user))
+    // eslint-disable-next-line no-undef
+    User.findById(id, (err, user) => done(err, user)),
   )
 
   app.use('/api/auth', authRoutes)

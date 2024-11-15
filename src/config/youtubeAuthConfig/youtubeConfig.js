@@ -19,8 +19,8 @@ passport.use(
         'email',
         'profile',
         'https://www.googleapis.com/auth/youtube',
-        'https://www.googleapis.com/auth/youtube.force-ssl'
-      ]
+        'https://www.googleapis.com/auth/youtube.force-ssl',
+      ],
     },
     async (accessToken, refreshToken, profile, done) => {
       ytAuth.youtubeSetToken(accessToken)
@@ -31,9 +31,8 @@ passport.use(
           const songs = playlistsAndSongs[playlistName]
           const createdPlaylistInfo = await createYoutubePlaylist(
             playlistName,
-            ytAuth.youtubeGetToken()
+            ytAuth.youtubeGetToken(),
           )
-          // let delayTime = 5000; // Start with a 5 second delay
 
           for (const songName of songs) {
             try {
@@ -41,7 +40,7 @@ passport.use(
               await insertSongIntoPlaylist(
                 createdPlaylistInfo.id,
                 songInfo.videoId,
-                ytAuth.youtubeGetToken()
+                ytAuth.youtubeGetToken(),
               )
             } catch (error) {
               console.error(`Error inserting song ${songName}:`, error)
@@ -50,8 +49,8 @@ passport.use(
         }
       }
       done(null, profile)
-    }
-  )
+    },
+  ),
 )
 
 module.exports = getOwnPlaylists

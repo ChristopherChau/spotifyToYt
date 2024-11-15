@@ -1,7 +1,7 @@
 // dictionaryModule.js
 const dictionary = {}
 
-function setPlaylistAndTracks (key, value) {
+function setPlaylistAndTracks(key, value) {
   if (dictionary[key]) {
     dictionary[key].push(value)
   } else {
@@ -9,7 +9,7 @@ function setPlaylistAndTracks (key, value) {
   }
 }
 
-function getPlaylistAndTracks () {
+function getPlaylistAndTracks() {
   return dictionary
 }
 

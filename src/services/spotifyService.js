@@ -4,16 +4,15 @@ const spotifyData = require('../../setSpotify')
 const { setPlaylistAndTracks } = require('../../setPlaylistInfo')
 
 let token = ''
-const dictionary = {}
 
 const spotifyApi = new SpotifyWebApi()
 
-async function setTokenData () {
+async function setTokenData() {
   token = auth.spotifyGetToken()
   spotifyApi.setAccessToken(token)
 }
 
-async function getMyData () {
+async function getMyData() {
   ;(async () => {
     setTokenData()
     const me = await spotifyApi.getMe()
@@ -23,33 +22,32 @@ async function getMyData () {
   })
 }
 
-async function getUserPlaylists (user) {
+async function getUserPlaylists(user) {
   const data = await spotifyApi.getUserPlaylists(user)
   const playlists = []
 
   // For multiple playlist
   for (const playlist of data.body.items) {
-    if (playlist.name === 'Kp') {
+    if (playlist.name === 'Kp') { //This is set to a specific playlist since we have limited quotas 
       playlists.push(playlist.name)
+      // eslint-disable-next-line no-unused-vars
       const tracks = await getPlayListsTracks(playlist.id, playlist.name)
     }
   }
 }
 
-async function getPlayListsTracks (playlistID, playlistName) {
+async function getPlayListsTracks(playlistID, playlistName) {
   const data = await spotifyApi.getPlaylistTracks(playlistID, {
     offset: 0,
     limit: 100,
-    fields: 'items'
+    fields: 'items',
   })
-  spotifyData.setData(data) // find out what this data is and why we are setting it to use it for later
-  console.log(data)
+  spotifyData.setData(data) 
 
   const tracks = []
   let count = 0
   for (const trackObj of data.body.items) {
-    if (count === 2) {
-      console.log('reaching 5 count limit')
+    if (count === 2) { //This is to limit the number of songs since we have limited quotas, change for real use
       break
     }
     const track = trackObj.track
@@ -58,11 +56,9 @@ async function getPlayListsTracks (playlistID, playlistName) {
     const songName = track.name
     setPlaylistAndTracks(playlistName, `${songName} ${artist}`)
     count += 1
-    // we're able to get all the songs and the artists to use globally
   }
 
   return tracks
 }
 
 module.exports = getMyData
-// module.exports = getPlayListsTracks;

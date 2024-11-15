@@ -4,7 +4,6 @@ const getMyData = require('../services/spotifyService')
 const { getPlaylistAndTracks } = require('../../setPlaylistInfo')
 const { downloadVideo } = require('../utils/utils')
 const ytAuth = require('../config/youtubeAuthConfig/youtubeToken')
-const getOwnPlaylists = require('../config/youtubeAuthConfig/youtubeConfig')
 const auth = require('../config/spotifyConfig/spotifyToken')
 const { searchOnYoutube } = require('../services/youtubeService')
 require('../config/youtubeAuthConfig/youtubeConfig') // Update path accordingly
@@ -30,7 +29,7 @@ const scopes = [
   'user-read-playback-position',
   'user-read-recently-played',
   'user-follow-read',
-  'user-follow-modify'
+  'user-follow-modify',
 ]
 
 router.get('/login', (req, res) => {
@@ -67,7 +66,7 @@ router.get('/callback', (req, res) => {
           const accessTokenAgain = data.body.access_token
           spotifyApi.setAccessToken(accessTokenAgain)
         },
-        (expiresIn / 2) * 1000
+        (expiresIn / 2) * 1000,
       )
 
       getMyData()
@@ -93,7 +92,7 @@ router.get('/getPlaylists', async (req, res) => {
     if (playlists && Object.keys(playlists).length > 0) {
       res.status(200).json({
         message: 'Playlists fetched successfully.',
-        playlists
+        playlists,
       })
     } else {
       res.status(200).json({ message: 'No playlists available.' })
@@ -106,7 +105,6 @@ router.get('/getPlaylists', async (req, res) => {
 
 router.get('/downloadSongs', async (req, res) => {
   const error = req.query.error
-  const code = req.query.code
 
   if (error) {
     console.error('Callback Error:', error)
@@ -133,12 +131,12 @@ router.get('/downloadSongs', async (req, res) => {
             await downloadVideo(playlistPath, songName, songInfo.videoUrl)
 
             console.log(
-              `Downloaded song: ${songName} to playlist: ${playlistName}`
+              `Downloaded song: ${songName} to playlist: ${playlistName}`,
             )
           } catch (error) {
             console.error(
               `Failed to download song: ${songName} -`,
-              error.message
+              error.message,
             )
           }
         }
