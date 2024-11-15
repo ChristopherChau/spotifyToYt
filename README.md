@@ -1,4 +1,5 @@
-# Spotify to YouTube Converter
+# Spotify to YouTube Converter 
+[https://img.shields.io/badge/Spotify-1ED760?&style=for-the-badge&logo=spotify&logoColor=white] ➱ [https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white] 
 
 ## Overview
 The Spotify to YouTube Converter is a tool that allows users to seamlessly transfer their Spotify playlists to YouTube playlists. By logging into their Spotify and YouTube accounts, users can easily create YouTube playlists containing the same songs as their Spotify playlists.
