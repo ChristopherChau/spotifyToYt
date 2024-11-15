@@ -1,7 +1,7 @@
 const SpotifyWebApi = require('spotify-web-api-node')
 const auth = require('../config/spotifyConfig/spotifyToken')
-const spotifyData = require('../../setSpotify')
-const { setPlaylistAndTracks } = require('../../setPlaylistInfo')
+const spotifyData = require('../globalDicts/setSpotify')
+const { setPlaylistAndTracks } = require('../globalDicts/setPlaylistInfo')
 
 let token = ''
 
@@ -28,7 +28,8 @@ async function getUserPlaylists(user) {
 
   // For multiple playlist
   for (const playlist of data.body.items) {
-    if (playlist.name === 'Kp') { //This is set to a specific playlist since we have limited quotas 
+    if (playlist.name === 'Kp') {
+      //This is set to a specific playlist since we have limited quotas
       playlists.push(playlist.name)
       // eslint-disable-next-line no-unused-vars
       const tracks = await getPlayListsTracks(playlist.id, playlist.name)
@@ -42,12 +43,13 @@ async function getPlayListsTracks(playlistID, playlistName) {
     limit: 100,
     fields: 'items',
   })
-  spotifyData.setData(data) 
+  spotifyData.setData(data)
 
   const tracks = []
   let count = 0
   for (const trackObj of data.body.items) {
-    if (count === 2) { //This is to limit the number of songs since we have limited quotas, change for real use
+    if (count === 2) {
+      //This is to limit the number of songs since we have limited quotas, change for real use
       break
     }
     const track = trackObj.track

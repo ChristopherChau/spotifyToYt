@@ -1,7 +1,7 @@
 const express = require('express')
 const spotifyApi = require('../config/spotifyConfig/spotifyConfig')
 const getMyData = require('../services/spotifyService')
-const { getPlaylistAndTracks } = require('../../setPlaylistInfo')
+const { getPlaylistAndTracks } = require('../globalDicts/setPlaylistInfo')
 const { downloadVideo } = require('../utils/utils')
 const ytAuth = require('../config/youtubeAuthConfig/youtubeToken')
 const auth = require('../config/spotifyConfig/spotifyToken')

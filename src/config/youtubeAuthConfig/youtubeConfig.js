@@ -1,7 +1,7 @@
 const passport = require('passport')
 const Strategy = require('passport-google-oauth20').Strategy
 const ytAuth = require('./youtubeToken')
-const { getPlaylistAndTracks } = require('../../../setPlaylistInfo')
+const { getPlaylistAndTracks } = require('../../globalDicts/setPlaylistInfo')
 const {
   searchOnYoutube,
   getOwnPlaylists,
