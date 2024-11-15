@@ -1,8 +1,6 @@
 # Spotify to YouTube Converter 
 
-  [![Spotify](https://img.shields.io/badge/Spotify-1ED760?&style=for-the-badge&logo=spotify&logoColor=white)](https://spotify.com) :arrow_right: [![YouTube](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtube.com) :arrow_right: :computer:
-
-
+[![Spotify](https://img.shields.io/badge/Spotify-1ED760?&style=for-the-badge&logo=spotify&logoColor=white)](https://spotify.com) :arrow_right: [![YouTube](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtube.com) :arrow_right: :computer:
 
 
 ## Overview
@@ -23,6 +21,11 @@ I built this project for several reasons:
 - **YouTube Authentication**: Users log into their YouTube account via Google OAuth to authorize song searching, playlist retrieval, and playlist creation.
 - **Playlist Conversion**: Convert Spotify playlists into YouTube playlists.
 - **Local Download**: Download the converted YouTube playlists onto your local machine.
+
+## Testing
+
+Due to my limited experience at the time, I did not implement automated testing for this project. The nature of the tool, which involves interacting with external APIs and handling user authentication, made it challenging to set up tests as this project was an introduction to API usage for me. If I were to revisit this project, I would focus on mocking API responses to cover testing.
+
 
 ## Tools Used
 - Spotify Web API
