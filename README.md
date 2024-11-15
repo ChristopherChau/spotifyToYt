@@ -1,12 +1,6 @@
 # Spotify to YouTube Converter 
 
-<div style="display: flex; align-items: center; justify-content: center; height: 100vh;">
-    <img src="https://img.shields.io/badge/Spotify-1ED760?&style=for-the-badge&logo=spotify&logoColor=white" alt="Spotify">
-  <span> :arrow_right: </span>
-    <img src="https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white" alt="YouTube">
-  <span> :arrow_right: </span>
-  <span> :computer: </span>
-</div>
+  [![Spotify](https://img.shields.io/badge/Spotify-1ED760?&style=for-the-badge&logo=spotify&logoColor=white)](https://spotify.com) :arrow_right: [![YouTube](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtube.com) :arrow_right: :computer:
 
 
 
