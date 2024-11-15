@@ -1,5 +1,6 @@
 # Spotify to YouTube Converter 
-[![Spotify](https://img.shields.io/badge/Spotify-1ED760?&style=for-the-badge&logo=spotify&logoColor=white)](https://spotify.com) ➱ [![YouTube](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtube.com)
+[![Spotify](https://img.shields.io/badge/Spotify-1ED760?&style=for-the-badge&logo=spotify&logoColor=white)](https://spotify.com) ![Large Arrow]([https://path_to_your_image.com/large_arrow.png](https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.clipartmax.com%2Fmiddle%2Fm2i8H7Z5G6K9d3i8_pictures-of-arrows-pointing-right-arrow-pointing-right-png%2F&psig=AOvVaw0ghLzaBCtZ0XcM9FiyUGXw&ust=1731799797890000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCKjk5pC_34kDFQAAAAAdAAAAABAE)) [![YouTube](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtube.com) ![Large Arrow]([https://path_to_your_image.com/large_arrow.png](https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.clipartmax.com%2Fmiddle%2Fm2i8H7Z5G6K9d3i8_pictures-of-arrows-pointing-right-arrow-pointing-right-png%2F&psig=AOvVaw0ghLzaBCtZ0XcM9FiyUGXw&ust=1731799797890000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCKjk5pC_34kDFQAAAAAdAAAAABAE)) 💻 
+
 
 
 ## Overview
