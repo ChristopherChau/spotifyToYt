@@ -4,7 +4,7 @@
 
 
 ## Overview
-The Spotify to YouTube Converter is a tool that allows users to seamlessly transfer their Spotify playlists to YouTube playlists. By logging into their Spotify and YouTube accounts, users can easily create YouTube playlists containing the same songs as their Spotify playlists.
+The Spotify to YouTube Converter is a tool that allows users to seamlessly transfer their Spotify playlists to YouTube playlists. By logging into their Spotify and YouTube accounts, users can easily create YouTube playlists containing the same songs as their Spotify playlists. 
 
 ## Why I Built This Project
 
@@ -31,4 +31,8 @@ Due to my limited experience at the time, I did not implement automated testing 
 - Spotify Web API
 - YouTube Data API
 - Google OAuth client library
+
+## Disclaimer
+
+This is my first project, and at the time of its initial development, I was still learning best practices and conventions for API integration and project structuring. While I have since revisited the code to clean it up slightly, some areas may still benefit from further refinement and optimization. I welcome any feedback to help improve this tool.
 
