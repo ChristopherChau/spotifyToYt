@@ -34,5 +34,5 @@ Due to my limited experience at the time, I did not implement automated testing 
 
 ## Disclaimer
 
-This is my first project, and at the time of its initial development, I was still learning best practices and conventions for API integration and project structuring. While I have since revisited the code to clean it up slightly, some areas may still benefit from further refinement and optimization. I welcome any feedback to help improve this tool.
+This is my first project, and at the time of its initial development, I was still learning best practices and conventions for API integration and project structuring. While I have since revisited the code to slightly clean it up, some areas may still benefit from further refinement and optimization. I welcome any feedback to help improve this tool.
 
